@@ -565,6 +565,60 @@ body, html {
 }
 
 
+/* Modal Styles */
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+.modal.hidden { display: none; }
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.close {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.tablink {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+}
+.tablink.active {
+  background: #ff6f61;
+  color: white;
+}
+.tabcontent { display: none; }
+.tabcontent.active { display: block; }
+
+/* Mobile */
+@media (max-width: 500px) {
+  .tablink {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+
 
 
 .site-footer {

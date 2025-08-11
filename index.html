@@ -282,8 +282,62 @@
 </section>
 
 
+<!-- Trigger Button -->
+<button id="openPolicies" class="policy-btn">View Our Policies</button>
 
-  
+<!-- Modal Structure -->
+<div id="policyModal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Our Policies</h2>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tablink active" data-tab="terms">Terms of Service</button>
+      <button class="tablink" data-tab="privacy">Privacy Policy</button>
+      <button class="tablink" data-tab="refund">Refund Policy</button>
+      <button class="tablink" data-tab="allergen">Allergen Info</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div id="terms" class="tabcontent active">
+      <p><strong>Welcome to The Cake Cartel!</strong><br>
+      By placing an order with us, you agree to the following terms:  
+      • Orders subject to product availability.  
+      • Prices may change without notice, but you pay the price agreed at checkout.  
+      • Custom cake orders: 48hrs notice + 50% deposit.  
+      • We reserve the right to decline orders not meeting our quality standards.  
+      • Cakes are intended for immediate consumption or proper storage.  
+      • We are not liable for mishandling after pickup/delivery.</p>
+    </div>
+
+    <div id="privacy" class="tabcontent">
+      <p><strong>Your privacy matters to us.</strong><br>
+      • We collect only info needed to process your order.  
+      • Payment info handled securely by our provider; we don’t store card details.  
+      • We may use your email for order updates or promos (unsubscribe anytime).  
+      • Your data is never sold or shared except to fulfill your order.</p>
+    </div>
+
+    <div id="refund" class="tabcontent">
+      <p><strong>We want you to love every bite!</strong><br>
+      • Contact us within 24hrs if you’re unhappy.  
+      • Refunds/replacements require proof of purchase.  
+      • Returns not accepted unless damaged/incorrect.  
+      • Custom deposits non-refundable if canceled <48hrs before pickup/delivery.</p>
+    </div>
+
+    <div id="allergen" class="tabcontent">
+      <p><strong>Food safety is our priority.</strong><br>
+      • Made in a kitchen that handles nuts, wheat, dairy, soy, and eggs.  
+      • We cannot guarantee allergen-free products.  
+      • Please inform us of allergies when ordering.</p>
+    </div>
+  </div>
+</div>
+
+
+
     <footer class="site-footer" id="footer">
   <div class="footer-container">
 
