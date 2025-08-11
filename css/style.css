@@ -565,14 +565,15 @@ body, html {
 }
 
 
-/* Modal Styles */
 .policy-btn{
     border: none;
     border-radius: 10px;
-    background-color: #fff;
+    background-color: pink;
     color: #000;
     padding:20px;
     box-shadow: 10px 10px 10px rgba(0,0,0,0.4);
+    cursor:pointer;
+
 }
 .modal {
   display: flex;
@@ -584,7 +585,9 @@ body, html {
   width: 100%; height: 100%;
   background: rgba(0,0,0,0.5);
 }
-.modal.hidden { display: none; }
+.modal.hidden {
+     display: none; 
+}
 .modal-content {
   background: #fff;
   padding: 20px;
