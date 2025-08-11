@@ -260,6 +260,26 @@
     </div>
 </section>
 
+<section class="partners">
+  <h2>Our Distribution Partners</h2>
+  <div class="logo-slider">
+    <div class="slide-track">
+      <div class="slide"><img src="supermarket1.png" alt="Supermarket 1"></div>
+      <div class="slide"><img src="supermarket2.png" alt="Supermarket 2"></div>
+      <div class="slide"><img src="supermarket3.png" alt="Supermarket 3"></div>
+      <div class="slide"><img src="supermarket4.png" alt="Supermarket 4"></div>
+      <div class="slide"><img src="supermarket5.png" alt="Supermarket 5"></div>
+
+      <div class="slide"><img src="supermarket1.png" alt="Supermarket 1"></div>
+      <div class="slide"><img src="supermarket2.png" alt="Supermarket 2"></div>
+      <div class="slide"><img src="supermarket3.png" alt="Supermarket 3"></div>
+      <div class="slide"><img src="supermarket4.png" alt="Supermarket 4"></div>
+      <div class="slide"><img src="supermarket5.png" alt="Supermarket 5"></div>
+    </div>
+  </div>
+</section>
+
+
 
   
     <footer class="site-footer" id="footer">
