@@ -16,3 +16,35 @@ const navLinks = document.getElementById('nav-links');
   }, { threshold: 0.3 });
 
   fadeIns.forEach(card => observer.observe(card));
+
+
+
+const modal = document.getElementById('policyModal');
+const openBtn = document.getElementById('openPolicies');
+const closeBtn = modal.querySelector('.close');
+const tabLinks = document.querySelectorAll('.tablink');
+const tabContents = document.querySelectorAll('.tabcontent');
+
+openBtn.addEventListener('click', () => {
+  modal.classList.remove('hidden');
+});
+
+closeBtn.addEventListener('click', () => {
+  modal.classList.add('hidden');
+});
+
+window.addEventListener('click', (e) => {
+  if (e.target === modal) modal.classList.add('hidden');
+});
+
+tabLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    tabLinks.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    const target = link.getAttribute('data-tab');
+    tabContents.forEach(c => {
+      c.classList.remove('active');
+      if (c.id === target) c.classList.add('active');
+    });
+  });
+});
