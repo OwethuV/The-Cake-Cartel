@@ -1,1 +1,0 @@
-//Learn wtf AJAX is
