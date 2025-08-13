@@ -71,13 +71,13 @@ if (isset($_SESSION['message'])) {
         <p>This is where you would typically have a form for delivery address, payment method selection, etc.</p>
         <p>For this example, we'll assume the user's registered address is used and payment is "on delivery".</p>
 
-        <form action="php/process_order.php" method="POST">
+        <form action="php/payfast_checkout.php" method="POST">
             <input type="hidden" name="totalPrice" value="<?php echo $finalTotalPrice; ?>">
             <input type="hidden" name="deliveryPrice" value="<?php echo $deliveryPrice; ?>">
             <?php foreach ($cartItems as $cartId): ?>
                 <input type="hidden" name="cartIds[]" value="<?php echo $cartId; ?>">
             <?php endforeach; ?>
-            <button type="submit" class="btn btn-success btn-lg">Place Order</button>
+            <button type="submit" class="btn btn-success btn-lg">Pay With PayFast</button>
         </form>
     </div>
 </div>
