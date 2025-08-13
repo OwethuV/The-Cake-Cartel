@@ -16,7 +16,7 @@ $stmt = $conn->prepare("SELECT o.orderId, o.deliveryPrice, o.totalPrice, o.statu
                         FROM ORDERS o
                         JOIN ORDER_ITEMS oi ON o.orderId = oi.orderId
                         JOIN PRODUCTS p ON oi.productId = p.productId
-                        WHERE o.userId = ?
+                        WHERE o.cartId = ?
                         ORDER BY o.createdAt DESC");
 
 $stmt->bind_param("i", $userId);

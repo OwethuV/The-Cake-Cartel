@@ -18,7 +18,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 <?php if ($product): ?>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 w-10 l-10">
             <img src="<?php echo htmlspecialchars($product['productImg']); ?>" class="img-fluid rounded" alt="<?php echo htmlspecialchars($product['productName']); ?>" width="1000" length="1000">
         </div>
         <div class="col-md-6">
