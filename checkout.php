@@ -80,4 +80,5 @@ document.getElementById("deliveryMethod").addEventListener("change", function ()
 
 <?php
 $conn->close();
-include 'includes/footer.php
+include 'includes/footer.php';
+?>
