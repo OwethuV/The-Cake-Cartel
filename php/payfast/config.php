@@ -17,9 +17,10 @@ foreach ($env as $line) {
     $_ENV[trim($key)] = trim($value);
 }
 
-// Assign PayFast variables
-$merchant_id  = $_ENV['PAYFAST_MERCHANT_ID'] ?? '';
-$merchant_key = $_ENV['PAYFAST_MERCHANT_KEY'] ?? '';
-$passphrase   = $_ENV['PAYFAST_PASSPHRASE'] ?? '';
-$env          = $_ENV['PAYFAST_ENV'] ?? 'sandbox';
-$baseUrl      = $_ENV['PAYFAST_BASE_URL'] ?? 'http://localhost/cake';
+
+$merchant_id  = trim($_ENV['PAYFAST_MERCHANT_ID'] ?? '');
+$merchant_key = trim($_ENV['PAYFAST_MERCHANT_KEY'] ?? '');
+$passphrase   = trim($_ENV['PAYFAST_PASSPHRASE'] ?? '');
+$env          = trim($_ENV['PAYFAST_ENV'] ?? 'sandbox');
+$baseUrl      = rtrim(trim($_ENV['PAYFAST_BASE_URL'] ?? 'http://localhost/cake'), '/');
+

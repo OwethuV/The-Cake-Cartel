@@ -1,8 +1,8 @@
-Signature string:
-merchant_id=10000100&merchant_key=46f0cd694581a&return_url=http%3A%2F%2Flocalhost%2Fcake%2Fpayfast_return.php&cancel_url=...
+Signature String:
+amount=659.97&cancel_url=http%3A%2F%2Flocalhost%2Fcake%2Fpayfast_cancel.php&email_address=samjackson%40gmail.com&item_name=Order+ORD-f7c98a91&m_payment_id=ORD-f7c98a91&merchant_id=10041193&merchant_key=wvfg2nbxyraez&notify_url=http%3A%2F%2Flocalhost%2Fcake%2Fpayfast_itn.php&return_url=http%3A%2F%2Flocalhost%2Fcake%2Fpayfast_return.php&passphrase=mySecret123
 
 Signature:
-d41d8cd98f00b204e9800998ecf8427e
+2a1d39254612741f4fd41a6d84a93d32
 
-Query string:
-merchant_id=10000100&merchant_key=46f0cd694581a&return_url=http%3A%2F%2Flocalhost%2Fcake%2Fpayfast_return.php&cancel_url=...&signature=d41d8cd98f00b204e9800998ecf8427e
+URL:
+https://sandbox.payfast.co.za/eng/process?amount=659.97&cancel_url=http%3A%2F%2Flocalhost%2Fcake%2Fpayfast_cancel.php&email_address=samjackson%40gmail.com&item_name=Order%20ORD-f7c98a91&m_payment_id=ORD-f7c98a91&merchant_id=10041193&merchant_key=wvfg2nbxyraez&notify_url=http%3A%2F%2Flocalhost%2Fcake%2Fpayfast_itn.php&return_url=http%3A%2F%2Flocalhost%2Fcake%2Fpayfast_return.php&signature=2a1d39254612741f4fd41a6d84a93d32

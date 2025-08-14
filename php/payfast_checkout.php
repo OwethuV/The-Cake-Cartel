@@ -17,7 +17,7 @@ if (!is_numeric($totalPrice) || $totalPrice <= 0) {
     die("Invalid order amount.");
 }
 
-// Get user email from session or DB
+// Get user email
 $email = $_SESSION['userEmail'] ?? '';
 if (!$email) {
     $stmt = $conn->prepare("SELECT email FROM USERS WHERE userId = ?");
@@ -28,7 +28,7 @@ if (!$email) {
     $stmt->close();
 }
 
-// Insert orders for each cart item
+// Insert each cart item into the ORDERS table
 foreach ($cartIds as $cartId) {
     $stmt = $conn->prepare("SELECT cartPrice FROM CART WHERE cartId = ? AND userId = ?");
     $stmt->bind_param("ii", $cartId, $userId);
@@ -45,7 +45,7 @@ foreach ($cartIds as $cartId) {
     $stmt->close();
 }
 
-// Create a unique order code
+// Create a unique order reference
 $orderCode = 'ORD-' . bin2hex(random_bytes(4));
 
 // Prepare PayFast parameters
@@ -61,10 +61,10 @@ $pfData = [
     'email_address'  => trim($email),
 ];
 
-// STEP 1: Sort parameters alphabetically by key
+// Step 1: Sort the array by key
 ksort($pfData);
 
-// STEP 2: Build the signature string
+// Step 2: Build the signature string
 $signatureString = '';
 foreach ($pfData as $key => $val) {
     $val = trim($val);
@@ -74,21 +74,26 @@ foreach ($pfData as $key => $val) {
 }
 $signatureString = rtrim($signatureString, '&');
 
-// STEP 3: Generate signature (no passphrase, so just md5 of string)
+// Step 3: Append passphrase if set
+if (!empty($passphrase)) {
+    $signatureString .= '&passphrase=' . urlencode($passphrase);
+}
+
+// Step 4: Generate signature
 $signature = md5($signatureString);
 $pfData['signature'] = $signature;
 
-// STEP 4: Build query string with RFC3986 encoding for spaces (%20 not +)
+// Step 5: Build the final query string
 $queryString = http_build_query($pfData, '', '&', PHP_QUERY_RFC3986);
 
-// STEP 5: Choose PayFast environment URL
-$payfastUrl = ($env === 'production')
-    ? 'https://www.payfast.co.za/eng/process'
+// Step 6: PayFast URL
+$payfastUrl = ($env === 'production') 
+    ? 'https://www.payfast.co.za/eng/process' 
     : 'https://sandbox.payfast.co.za/eng/process';
 
-// STEP 6: Debug log (optional)
-file_put_contents('payfast_signature_debug.log', "Signature string:\n" . $signatureString . "\n\nSignature:\n" . $signature . "\n\nQuery string:\n" . $queryString);
+// Step 7: Debug logging (optional, can delete after it works)
+file_put_contents('payfast_signature_debug.log', "Signature String:\n$signatureString\n\nSignature:\n$signature\n\nURL:\n$payfastUrl?$queryString\n");
 
-// STEP 7: Redirect user to PayFast
-header('Location: ' . $payfastUrl . '?' . $queryString);
+// Step 8: Redirect to PayFast
+header("Location: $payfastUrl?$queryString");
 exit();
