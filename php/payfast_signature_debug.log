@@ -1,0 +1,8 @@
+Signature string:
+merchant_id=10000100&merchant_key=46f0cd694581a&return_url=http%3A%2F%2Flocalhost%2Fcake%2Fpayfast_return.php&cancel_url=...
+
+Signature:
+d41d8cd98f00b204e9800998ecf8427e
+
+Query string:
+merchant_id=10000100&merchant_key=46f0cd694581a&return_url=http%3A%2F%2Flocalhost%2Fcake%2Fpayfast_return.php&cancel_url=...&signature=d41d8cd98f00b204e9800998ecf8427e
