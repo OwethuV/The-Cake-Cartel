@@ -48,38 +48,47 @@ foreach ($cartIds as $cartId) {
 // Create a unique order code for PayFast
 $orderCode = 'ORD-' . bin2hex(random_bytes(4));
 
-// Prepare PayFast request
+// Prepare PayFast request data
 $pfData = [
-    'merchant_id'  => trim($merchant_id),
-    'merchant_key' => trim($merchant_key),
-    'return_url'   => trim($baseUrl) . '/payfast_return.php',
-    'cancel_url'   => trim($baseUrl) . '/payfast_cancel.php',
-    'notify_url'   => trim($baseUrl) . '/payfast_itn.php',
-    'm_payment_id' => $orderCode,
-    'amount'       => number_format($totalPrice + $deliveryPrice, 2, '.', ''),
-    'item_name'    => "Order #$orderCode",
-    'email_address'=> trim($email),
+    'merchant_id'    => trim($merchant_id),
+    'merchant_key'   => trim($merchant_key),
+    'return_url'     => trim($baseUrl) . '/payfast_return.php',
+    'cancel_url'     => trim($baseUrl) . '/payfast_cancel.php',
+    'notify_url'     => trim($baseUrl) . '/payfast_itn.php',
+    'm_payment_id'   => $orderCode,
+    'amount'         => number_format($totalPrice + $deliveryPrice, 2, '.', ''),
+    'item_name'      => "Order $orderCode",
+    'email_address'  => trim($email),
 ];
 
-// Generate signature
+// 1. Sort the data by key
 ksort($pfData);
+
+// 2. Build the signature string (URL-encoded values)
 $pfParamString = '';
 foreach ($pfData as $key => $val) {
     if ($val !== '') {
         $pfParamString .= $key . '=' . urlencode(trim($val)) . '&';
     }
 }
-$pfParamString = rtrim($pfParamString, '&');
-if (!empty($passphrase)) {
-    $pfParamString .= '&passphrase=' . urlencode(trim($passphrase));
-}
+$pfParamString = rtrim($pfParamString, '&'); // Remove last '&'
+
+// 3. No passphrase used — do not append one
+
+// 4. Generate MD5 signature
 $pfData['signature'] = md5($pfParamString);
 
-// Determine PayFast URL (sandbox or live)
-$payfastUrl = ($env === 'production') 
-    ? 'https://www.payfast.co.za/eng/process' 
+// 5. Build PayFast URL correctly using RFC3986 encoding (for proper spaces etc.)
+$queryString = http_build_query($pfData, '', '&', PHP_QUERY_RFC3986);
+
+// 6. Determine PayFast URL (sandbox or production)
+$payfastUrl = ($env === 'production')
+    ? 'https://www.payfast.co.za/eng/process'
     : 'https://sandbox.payfast.co.za/eng/process';
 
-// Redirect user to PayFast for payment
-header('Location: ' . $payfastUrl . '?' . http_build_query($pfData));
+// Optional debug
+// file_put_contents('payfast_debug.log', $payfastUrl . '?' . $queryString);
+
+// 7. Redirect user to PayFast
+header('Location: ' . $payfastUrl . '?' . $queryString);
 exit();

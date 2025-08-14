@@ -22,4 +22,4 @@ $merchant_id  = $_ENV['PAYFAST_MERCHANT_ID'] ?? '';
 $merchant_key = $_ENV['PAYFAST_MERCHANT_KEY'] ?? '';
 $passphrase   = $_ENV['PAYFAST_PASSPHRASE'] ?? '';
 $env          = $_ENV['PAYFAST_ENV'] ?? 'sandbox';
-$baseUrl      = $_ENV['PAYFAST_BASE_URL'] ?? 'http:///cake';
+$baseUrl      = $_ENV['PAYFAST_BASE_URL'] ?? 'http://localhost/cake';
