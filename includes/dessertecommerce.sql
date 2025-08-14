@@ -2,7 +2,7 @@
 CREATE DATABASE IF NOT EXISTS DessertECommerce;
 USE DessertECommerce;
 
--- Create USERS table
+-- USERS table
 CREATE TABLE IF NOT EXISTS USERS (
     userId INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS USERS (
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Create PRODUCTS table
+-- PRODUCTS table
 CREATE TABLE IF NOT EXISTS PRODUCTS (
     productId INT AUTO_INCREMENT PRIMARY KEY,
     productName VARCHAR(100) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS PRODUCTS (
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Create CART table
+-- CART table (optional)
 CREATE TABLE IF NOT EXISTS CART (
     cartId INT AUTO_INCREMENT PRIMARY KEY,
     userId INT NOT NULL,
@@ -39,10 +39,10 @@ CREATE TABLE IF NOT EXISTS CART (
     FOREIGN KEY (productId) REFERENCES PRODUCTS(productId) ON DELETE CASCADE
 );
 
--- Create ORDERS table with userId added (fix for your error)
+-- ORDERS table
 CREATE TABLE IF NOT EXISTS ORDERS (
     orderId INT AUTO_INCREMENT PRIMARY KEY,
-    userId INT NOT NULL,                 -- << Added this column
+    userId INT NOT NULL,
     deliveryPrice DECIMAL(10, 2) NOT NULL,
     totalPrice DECIMAL(10, 2) NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'Pending',
@@ -51,19 +51,14 @@ CREATE TABLE IF NOT EXISTS ORDERS (
     FOREIGN KEY (userId) REFERENCES USERS(userId) ON DELETE CASCADE
 );
 
--- Create ORDER_ITEMS table
+-- ORDER_ITEMS table
 CREATE TABLE IF NOT EXISTS ORDER_ITEMS (
     orderItemId INT AUTO_INCREMENT PRIMARY KEY,
     orderId INT NOT NULL,
     productId INT NOT NULL,
     quantity INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL, -- total price for this quantity
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (orderId) REFERENCES ORDERS(orderId) ON DELETE CASCADE,
     FOREIGN KEY (productId) REFERENCES PRODUCTS(productId) ON DELETE CASCADE
 );
-
--- (Optional) You can remove cartId from ORDERS, because the order should not be tied 1:1 with cartId, but rather you track order items separately.
-
--- Insert your PRODUCTS here (your provided INSERT statements) ...
--- [your product INSERTS go here as-is]
