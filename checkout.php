@@ -30,15 +30,14 @@ if ($result->num_rows > 0) {
 }
 $stmt->close();
 
-$deliveryFee = ($totalCartValue >= 700) ? 0.00 : 5.00;
-$finalTotal = $totalCartValue + $deliveryFee;
-
-// Load credentials
 $merchant_id = $_ENV['PAYFAST_MERCHANT_ID'];
 $merchant_key = $_ENV['PAYFAST_MERCHANT_KEY'];
 $return_url = $_ENV['PAYFAST_RETURN_URL'];
 $cancel_url = $_ENV['PAYFAST_CANCEL_URL'];
 $notify_url = $_ENV['PAYFAST_NOTIFY_URL'];
+
+$deliveryFee = 0; // default pickup
+$finalTotal = $totalCartValue;
 ?>
 
 <h2 class="mb-4">Checkout</h2>
@@ -66,13 +65,14 @@ $notify_url = $_ENV['PAYFAST_NOTIFY_URL'];
             </li>
         </ul>
 
-        <h4>Delivery Option</h4>
+        <h4>Choose Delivery Method</h4>
         <form action="https://www.payfast.co.za/eng/process" method="POST" id="payfastForm">
             <select name="delivery_method" id="delivery-method" class="form-control mb-3" required>
                 <option value="pickup" selected>Pickup (Free)</option>
-                <option value="delivery">Delivery (R5.00 unless over R700)</option>
+                <option value="delivery">Delivery (R5.00, Free over R700)</option>
             </select>
 
+            <!-- PayFast Fields -->
             <input type="hidden" name="merchant_id" value="<?= htmlspecialchars($merchant_id) ?>">
             <input type="hidden" name="merchant_key" value="<?= htmlspecialchars($merchant_key) ?>">
             <input type="hidden" name="return_url" value="<?= htmlspecialchars($return_url) ?>">
@@ -80,7 +80,8 @@ $notify_url = $_ENV['PAYFAST_NOTIFY_URL'];
             <input type="hidden" name="notify_url" value="<?= htmlspecialchars($notify_url) ?>">
             <input type="hidden" name="amount" id="amount" value="<?= number_format($finalTotal, 2, '.', '') ?>">
             <input type="hidden" name="item_name" value="Order from The Cake Cartel">
-            
+
+            <!-- Pass cart IDs -->
             <?php foreach ($cartItems as $cartId): ?>
                 <input type="hidden" name="cartIds[]" value="<?= $cartId ?>">
             <?php endforeach; ?>
@@ -97,16 +98,22 @@ $notify_url = $_ENV['PAYFAST_NOTIFY_URL'];
     const amountInput = document.getElementById('amount');
     const subtotal = <?= number_format($totalCartValue, 2, '.', '') ?>;
 
-    deliveryMethod.addEventListener('change', () => {
+    function updateTotals() {
         let fee = 0;
         if (deliveryMethod.value === 'delivery') {
-            fee = subtotal >= 700 ? 0 : 5;
+            fee = (subtotal >= 700) ? 0 : 5;
         }
         const total = subtotal + fee;
+
         deliveryFeeDisplay.textContent = "R" + fee.toFixed(2);
         totalDisplay.textContent = "R" + total.toFixed(2);
         amountInput.value = total.toFixed(2);
-    });
+    }
+
+    deliveryMethod.addEventListener('change', updateTotals);
+
+    // Run once on page load
+    updateTotals();
 </script>
 
 <?php include 'includes/footer.php'; ?>
