@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/db_connect.php';  // Your secure DB connection file
+require_once '../includes/db_connect.php';  // Your secure DB connection file
 
 // Make sure user is logged in and userId is set
 if (!isset($_SESSION['user_id'])) {
