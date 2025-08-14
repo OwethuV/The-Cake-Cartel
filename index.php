@@ -71,7 +71,6 @@ $result = $conn->query($sql);
             height: 100%;
             object-fit: cover;
             z-index: 1;
-            filter: brightness(0.8);
         }
 
         .overlay {

@@ -1,5 +1,16 @@
 <?php 
 session_start();
+include 'includes/header.php';
+
+// Clear session data related to user authentication
+if (isset($_SESSION['user_id'])) {
+    unset($_SESSION['user_id']);
+}
+// Redirect to homepage if already registered
+if (isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -162,7 +173,7 @@ session_start();
                     </div>
                     <div class="mb-3">
                         <label for="cell" class="form-label">Cell Number (Optional)</label>
-                        <input type="tel" class="form-control" id="cell" name="cell" placeholder="+27 67 404 0090">
+                        <input type="tel" class="form-control" id="cell" name="cell" placeholder="">
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address (Optional)</label>
@@ -190,5 +201,7 @@ session_start();
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <?php include 'includes/footer.php'; ?>
 </body>
 </html>

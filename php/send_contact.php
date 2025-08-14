@@ -1,17 +1,58 @@
 <?php
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = htmlspecialchars($_POST['contactName']);
-    $email = htmlspecialchars($_POST['contactEmail']);
-    $subject = htmlspecialchars($_POST['contactSubject']);
-    $message = htmlspecialchars($_POST['contactMessage']);
+//CSRF Validation
+if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    $_SESSION['message'] = "Security token mismatch. Please reload the page.";
+    header("Location: ../contact.php");
+    exit();
+}
 
-    $to = "outisvalantiya@gmail.com"; // **CHANGE THIS TO YOUR ACTUAL EMAIL ADDRESS**
-    $headers = "From: " . $name . " <" . $email . ">\r\n";
-    $headers .= "Reply-To: " . $email . "\r\n";
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+require "../vendor/autoload.php";
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = trim(htmlspecialchars($_POST['contactName']));
+    $email = trim(htmlspecialchars($_POST['contactEmail']));
+    $subject = trim(htmlspecialchars($_POST['contactSubject']));
+    $message = trim(htmlspecialchars($_POST['contactMessage']));
+    // Validate inputs
+    if (empty($name) || empty($email) || empty($subject) || empty($message)) {
+        $_SESSION['message'] = "All fields are required.";
+        header("Location: ../contact.php");
+        exit();
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['message'] = "Invalid email format.";
+        header("Location: ../contact.php");
+        exit();
+    }
+    // Limit the length of inputs
+    if (strlen($name) > 100 || strlen($subject) > 100 || strlen($message) > 500) {
+        $_SESSION['message'] = "Input exceeds maximum length.";
+        header("Location: ../contact.php");
+        exit();
+    }
+
+    $mail = new PHPMailer(true);
+    $mail->SMTPDebug = 0;
+    $mail->isSMTP();
+    $mail->SMTPAuth = true;
+
+    $mail->Host = "smtp.gmail.com";
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587;
+
+    $mail->Username = "owethu.valantiya@gmail.com";
+    $mail->Password = "zxad jajd loql jbzr";
+
+    $mail->setFrom($email, $name);
+    $mail->addAddress("thecakecartel2025@gmail.com");
+
+    $mail->Subject = $subject; // Set the subject
+    $mail->isHTML(true); // Set email format to HTML
 
     $email_body = "
     <html>
@@ -22,23 +63,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>The Cake Cartel Form Submission</h2>
         <p><strong>Name:</strong> {$name}</p>
         <p><strong>Email:</strong> {$email}</p>
-        <p><strong>Subject:</strong> {$subject}</p>
+        <p><strong>Subject:</strong> {$subject}</p> 
         <p><strong>Message:</strong><br>{$message}</p>
     </body>
     </html>
     ";
 
-    // Use mail() function (requires PHP mail configuration on your server)
-    if (mail($to, $subject, $email_body, $headers)) {
+    $mail->Body = $email_body; // Set the email body
+
+    // Attempt to send the email
+    if ($mail->send()) {
         $_SESSION['message'] = "Your message has been sent successfully!";
+        error_log("Message set: " . $_SESSION['message']); // Debugging line
     } else {
         $_SESSION['message'] = "Failed to send your message. Please try again later.";
+        error_log("Message set: " . $_SESSION['message']); // Debugging line
     }
-
     header("Location: ../contact.php");
     exit();
 } else {
     header("Location: ../contact.php");
     exit();
 }
-?>

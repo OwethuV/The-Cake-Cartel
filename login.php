@@ -1,5 +1,16 @@
 <?php
 session_start();
+include 'includes/header.php';
+
+// Clear session data related to user authentication
+if (isset($_SESSION['user_id'])) {
+    unset($_SESSION['user_id']);
+}
+// Redirect to homepage if already logged in (just in case)
+if (isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -115,23 +126,6 @@ session_start();
             margin-left: 1em;
         }
 
-        .btn-google {
-            background: white;
-            color: var(--tan);
-            border: 2px solid #f0e6e0;
-            border-radius: 50px;
-            padding: 12px;
-            width: 100%;
-            font-weight: 500;
-            transition: all 0.3s;
-            margin-bottom: 1rem;
-        }
-
-        .btn-google:hover {
-            background: #f8f9fa;
-            border-color: #ddd;
-        }
-
         .form-control {
             border: 2px solid #f0e6e0;
             border-radius: 12px;
@@ -180,7 +174,8 @@ session_start();
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600&display=swap"
         rel="stylesheet">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+    <meta name="google-signin-client_id"
+        content="139900539257-dojbov6kpd0s8rv58g83n7as14dt681v.apps.googleusercontent.com">
     <!-- Replace with your Client ID -->
 </head>
 
@@ -196,10 +191,7 @@ session_start();
                     <?php unset($_SESSION['message']); ?>
                 <?php endif; ?>
 
-                <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline"
-                    data-text="continue_with" data-size="large" data-logo_alignment="left"></div>
-
-                <div class="divider">or login with email</div>
+                <div class="divider">login with email</div>
                 <form action="php/login.php" method="POST">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
@@ -219,27 +211,14 @@ session_start();
                 <a href="register.php" class="register-link">
                     Don't have an account? Register here
                 </a>
+                <a href="forgot_password.php" class="register-link">
+                    Forgot your password?
+                </a>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
-            var id_token = googleUser.getAuthResponse().id_token;
-
-            // Send the ID token to your server for verification
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'php/google_login.php'); // Create a new PHP file to handle Google login
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onload = function () {
-                // Handle the response from your server
-                console.log('Signed in as: ' + profile.getName());
-                window.location.href = 'index.php'; // Redirect to the homepage or dashboard
-            };
-            xhr.send('id_token=' + id_token);
-        }
-    </script>
 </body>
+<?php include 'includes/footer.php'; ?>
 
 </html>

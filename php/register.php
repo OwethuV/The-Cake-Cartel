@@ -35,10 +35,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Inserting the new user into database
     $stmt = $conn->prepare("INSERT INTO USERS (name, email, cell, address, password) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $name, $email, $cell, $address, $hashed_password);
+    // Get the user ID of the newly registered user
+    $userId = $stmt->insert_id;
 
     if ($stmt->execute()) {
-        $_SESSION['message'] = "Registration successful! You can now login.";
-        header("Location: ../login.php");
+        // Set session variables to log the user in
+        $_SESSION['user_id'] = $userId;
+        $_SESSION['userName'] = $name;
+        $_SESSION['message'] = "Registration successful! Welcome, $name.";
+        // Redirect to the homepage or user dashboard
+        header("Location: ../index.php");
+        exit();
     } else {
         $_SESSION['message'] = "Error: " . $stmt->error;
         header("Location: ../register.php");

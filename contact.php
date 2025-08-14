@@ -2,6 +2,7 @@
 session_start();
 include 'includes/header.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,12 +21,12 @@ include 'includes/header.php';
             margin: 0;
             padding: 0;
         }
-        
+
         body {
             background-color: #fff9f6;
             font-family: 'Poppins', 'Quicksand', sans-serif;
         }
-        
+
         .bakery-contact-wrapper {
             display: flex;
             justify-content: center;
@@ -33,12 +34,12 @@ include 'includes/header.php';
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .bakery-contact-container {
             width: 100%;
             max-width: 1200px;
         }
-        
+
         .bakery-contact-card {
             background: white;
             border-radius: 15px;
@@ -47,49 +48,49 @@ include 'includes/header.php';
             padding: 30px;
             margin: 0 auto;
         }
-        
+
         .contact-header {
             margin-bottom: 30px;
             text-align: center;
         }
-        
+
         .contact-main-title {
             font-family: 'Pacifico', cursive;
             color: #ff7e8a;
             font-size: 2.5rem;
             margin-bottom: 10px;
         }
-        
+
         .contact-subtitle {
             font-size: 1rem;
             color: #a38b82;
             max-width: 500px;
             margin: 0 auto 20px;
         }
-        
+
         .divider {
             height: 30px;
             margin: 15px 0;
             text-align: center;
         }
-        
+
         .contact-content-wrapper {
             margin-top: 30px;
         }
-        
+
         .contact-info-box {
             background: #fff9f6;
             border-radius: 12px;
             padding: 20px;
             height: 100%;
         }
-        
+
         .info-item {
             display: flex;
             margin-bottom: 20px;
             align-items: flex-start;
         }
-        
+
         .info-icon {
             background: #ffd6dd;
             width: 40px;
@@ -102,43 +103,43 @@ include 'includes/header.php';
             flex-shrink: 0;
             color: #ff7e8a;
         }
-        
+
         .material-icons {
             font-size: 20px;
         }
-        
+
         .info-content h3 {
             font-size: 1.1rem;
             color: #5a4a42;
             margin-bottom: 5px;
             font-weight: 600;
         }
-        
+
         .info-content p {
             color: #8a7369;
             margin: 0;
             line-height: 1.5;
             font-size: 0.95rem;
         }
-        
+
         .info-content a {
             color: #ff7e8a;
             text-decoration: none;
             transition: all 0.3s;
         }
-        
+
         .info-content a:hover {
             color: #ff5a6a;
             text-decoration: underline;
         }
-        
+
         .contact-form-box {
             background: white;
             padding: 25px;
             border-radius: 12px;
             height: 100%;
         }
-        
+
         .form-title {
             color: #5a4a42;
             font-size: 1.6rem;
@@ -146,11 +147,11 @@ include 'includes/header.php';
             font-weight: 600;
             font-family: 'Quicksand', sans-serif;
         }
-        
+
         .form-group {
             margin-bottom: 15px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 6px;
@@ -158,7 +159,7 @@ include 'includes/header.php';
             color: #5a4a42;
             font-size: 0.95rem;
         }
-        
+
         .form-control {
             border: 1px solid #f0e6e0;
             border-radius: 8px;
@@ -168,21 +169,21 @@ include 'includes/header.php';
             background: #fff9f6;
             font-size: 0.95rem;
         }
-        
+
         .form-control:focus {
             border-color: #ffb6c1;
             box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.2);
             background: white;
         }
-        
+
         .form-control::placeholder {
             color: #c4b5ac;
         }
-        
+
         textarea.form-control {
             min-height: 120px;
         }
-        
+
         .btn-send {
             background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
             border: none;
@@ -197,35 +198,36 @@ include 'includes/header.php';
             font-size: 0.9rem;
             cursor: pointer;
         }
-        
+
         .btn-send:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(255, 154, 158, 0.4);
         }
-        
+
         .btn-send i {
             margin-right: 6px;
         }
-        
+
         @media (max-width: 992px) {
             .bakery-contact-card {
                 padding: 25px;
             }
-            
-            .contact-info-box, .contact-form-box {
+
+            .contact-info-box,
+            .contact-form-box {
                 padding: 20px;
             }
         }
-        
+
         @media (max-width: 768px) {
             .contact-main-title {
                 font-size: 2rem;
             }
-            
+
             .bakery-contact-wrapper {
                 padding: 30px 15px;
             }
-            
+
             .info-item {
                 margin-bottom: 15px;
             }
@@ -238,11 +240,19 @@ include 'includes/header.php';
         <div class="bakery-contact-container">
             <div class="bakery-contact-card">
                 <div class="contact-header">
-                    <h1 class="contact-main-title">Contact Us</h1>
+                    <h1 class="contact-main-title mt-2">Contact Us</h1>
                     <p class="contact-subtitle">Have a question, feedback or a special request? We'd love to hear from
                         you!</p>
                 </div>
-
+                <!-- Display the session message -->
+                <?php if (isset($_SESSION['message'])): ?>
+                    <div class="alert alert-info" style="text-align: center; margin-bottom: 20px;">
+                        <?php
+                        echo $_SESSION['message'];
+                        unset($_SESSION['message']); // Clear the message after displaying it
+                        ?>
+                    </div>
+                <?php endif; ?>
                 <div class="contact-content-wrapper">
                     <div class="row" style="display: flex; flex-wrap: wrap; margin: -15px;">
                         <div class="col-lg-5" style="padding: 15px; flex: 0 0 41.666667%; max-width: 41.666667%;">
@@ -255,7 +265,8 @@ include 'includes/header.php';
                                         <h3>Our Bakery</h3>
                                         <p>The Cake Cartel<br>
                                             1234 Sweet Street<br>
-                                            Cape Town, 7780</p>
+                                            Cape Town, 7780
+                                        </p>
                                     </div>
                                 </div>
 
@@ -314,6 +325,11 @@ include 'includes/header.php';
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label for="contactSubject">Subject</label>
+                                        <input type="text" class="form-control" id="contactSubject"
+                                            name="contactSubject" placeholder="Subject" required>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="contactMessage">Your Message</label>
                                         <textarea class="form-control" id="contactMessage" name="contactMessage"
                                             placeholder="Type your message here..." required></textarea>
@@ -336,6 +352,3 @@ include 'includes/header.php';
     <?php
     include 'includes/footer.php';
     ?>
-</body>
-
-</html>
