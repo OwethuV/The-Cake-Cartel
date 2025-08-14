@@ -12,7 +12,6 @@ $userId = $_SESSION['userId'];
 $totalCartValue = 0;
 $cartItems = [];
 
-// Fetch cart items
 $sql = "SELECT c.cartId, c.cartPrice FROM CART c WHERE c.userId = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userId);
@@ -25,53 +24,21 @@ if ($result->num_rows > 0) {
         $cartItems[] = $row['cartId'];
     }
 } else {
-    $_SESSION['message'] = "Your cart is empty. Cannot proceed to checkout.";
+    $_SESSION['message'] = "Your cart is empty.";
     header("Location: cart.php");
     exit();
 }
 $stmt->close();
 
-$deliveryPrice = 0.00;
-$deliveryMethod = $_POST['deliveryMethod'] ?? 'pickup';
+$deliveryFee = ($totalCartValue >= 700) ? 0.00 : 5.00;
+$finalTotal = $totalCartValue + $deliveryFee;
 
-if ($deliveryMethod === 'delivery' && $totalCartValue < 700) {
-    $deliveryPrice = 5.00;
-}
-
-$finalTotalPrice = $totalCartValue + $deliveryPrice;
-
-// PayFast credentials (from .env)
-$merchant_id = getenv('PAYFAST_MERCHANT_ID');
-$merchant_key = getenv('PAYFAST_MERCHANT_KEY');
-$passphrase = getenv('PAYFAST_PASSPHRASE');
-$payfast_url = 'https://sandbox.payfast.co.za/eng/process';
-
-$item_name = 'Cake Order';
-$return_url = 'http://localhost/success.php';
-$cancel_url = 'http://localhost/cancel.php';
-$notify_url = 'http://localhost/ipn.php';
-
-$data = array(
-    'merchant_id' => $merchant_id,
-    'merchant_key' => $merchant_key,
-    'return_url' => $return_url,
-    'cancel_url' => $cancel_url,
-    'notify_url' => $notify_url,
-    'name_first' => $_SESSION['userName'] ?? 'Customer',
-    'email_address' => $_SESSION['userEmail'] ?? 'test@example.com',
-    'amount' => number_format($finalTotalPrice, 2, '.', ''),
-    'item_name' => $item_name,
-);
-
-// Add passphrase for signature if set
-$signature_data = [];
-foreach ($data as $key => $val) {
-    $signature_data[] = "$key=" . urlencode($val);
-}
-if (!empty($passphrase)) {
-    $signature_data[] = "passphrase=" . urlencode($passphrase);
-}
-$data['signature'] = md5(implode("&", $signature_data));
+// Load credentials
+$merchant_id = $_ENV['PAYFAST_MERCHANT_ID'];
+$merchant_key = $_ENV['PAYFAST_MERCHANT_KEY'];
+$return_url = $_ENV['PAYFAST_RETURN_URL'];
+$cancel_url = $_ENV['PAYFAST_CANCEL_URL'];
+$notify_url = $_ENV['PAYFAST_NOTIFY_URL'];
 ?>
 
 <h2 class="mb-4">Checkout</h2>
@@ -81,49 +48,65 @@ $data['signature'] = md5(implode("&", $signature_data));
     <?php unset($_SESSION['message']); ?>
 <?php endif; ?>
 
-<form method="POST" action="">
-    <div class="form-group mb-3">
-        <label for="deliveryMethod">Choose Delivery Option:</label>
-        <select name="deliveryMethod" id="deliveryMethod" class="form-control" onchange="this.form.submit()">
-            <option value="pickup" <?= ($deliveryMethod === 'pickup') ? 'selected' : '' ?>>Pickup (Free)</option>
-            <option value="delivery" <?= ($deliveryMethod === 'delivery') ? 'selected' : '' ?>>Delivery (R5 unless total > R700)</option>
-        </select>
-    </div>
-</form>
-
 <div class="row">
     <div class="col-md-8">
         <h4>Order Summary</h4>
         <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div><h6 class="my-0">Subtotal</h6></div>
-                <span class="text-muted">R<?= number_format($totalCartValue, 2) ?></span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div><h6 class="my-0">Delivery Fee</h6></div>
-                <span class="text-muted">R<?= number_format($deliveryPrice, 2) ?></span>
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Subtotal</span>
+                <strong>R<?= number_format($totalCartValue, 2) ?></strong>
             </li>
             <li class="list-group-item d-flex justify-content-between">
-                <strong>Total (ZAR)</strong>
-                <strong>R<?= number_format($finalTotalPrice, 2) ?></strong>
+                <span>Delivery Fee</span>
+                <strong id="delivery-fee">R<?= number_format($deliveryFee, 2) ?></strong>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span>Total</span>
+                <strong id="final-total">R<?= number_format($finalTotal, 2) ?></strong>
             </li>
         </ul>
 
-        <form action="<?= htmlspecialchars($payfast_url) ?>" method="POST">
-            <?php foreach ($data as $key => $value): ?>
-                <input type="hidden" name="<?= htmlspecialchars($key) ?>" value="<?= htmlspecialchars($value) ?>">
-            <?php endforeach; ?>
+        <h4>Delivery Option</h4>
+        <form action="https://www.payfast.co.za/eng/process" method="POST" id="payfastForm">
+            <select name="delivery_method" id="delivery-method" class="form-control mb-3" required>
+                <option value="pickup" selected>Pickup (Free)</option>
+                <option value="delivery">Delivery (R5.00 unless over R700)</option>
+            </select>
+
+            <input type="hidden" name="merchant_id" value="<?= htmlspecialchars($merchant_id) ?>">
+            <input type="hidden" name="merchant_key" value="<?= htmlspecialchars($merchant_key) ?>">
+            <input type="hidden" name="return_url" value="<?= htmlspecialchars($return_url) ?>">
+            <input type="hidden" name="cancel_url" value="<?= htmlspecialchars($cancel_url) ?>">
+            <input type="hidden" name="notify_url" value="<?= htmlspecialchars($notify_url) ?>">
+            <input type="hidden" name="amount" id="amount" value="<?= number_format($finalTotal, 2, '.', '') ?>">
+            <input type="hidden" name="item_name" value="Order from The Cake Cartel">
+            
             <?php foreach ($cartItems as $cartId): ?>
                 <input type="hidden" name="cartIds[]" value="<?= $cartId ?>">
             <?php endforeach; ?>
-            <input type="hidden" name="deliveryPrice" value="<?= $deliveryPrice ?>">
-            <input type="hidden" name="deliveryMethod" value="<?= $deliveryMethod ?>">
-            <button type="submit" class="btn btn-success btn-lg">Pay with PayFast</button>
+
+            <button type="submit" class="btn btn-success btn-lg">Pay Now</button>
         </form>
     </div>
 </div>
 
-<?php
-$conn->close();
-include 'includes/footer.php';
-?>
+<script>
+    const deliveryMethod = document.getElementById('delivery-method');
+    const deliveryFeeDisplay = document.getElementById('delivery-fee');
+    const totalDisplay = document.getElementById('final-total');
+    const amountInput = document.getElementById('amount');
+    const subtotal = <?= number_format($totalCartValue, 2, '.', '') ?>;
+
+    deliveryMethod.addEventListener('change', () => {
+        let fee = 0;
+        if (deliveryMethod.value === 'delivery') {
+            fee = subtotal >= 700 ? 0 : 5;
+        }
+        const total = subtotal + fee;
+        deliveryFeeDisplay.textContent = "R" + fee.toFixed(2);
+        totalDisplay.textContent = "R" + total.toFixed(2);
+        amountInput.value = total.toFixed(2);
+    });
+</script>
+
+<?php include 'includes/footer.php'; ?>
