@@ -1,6 +1,6 @@
 <?php
 include 'includes/header.php';
-include 'includes/db_connect.php';
+include 'includes/db_connect.php'; // This sets $mysqli
 
 if (!isset($_SESSION['userId'])) {
     $_SESSION['message'] = "Please login to checkout.";
@@ -14,7 +14,7 @@ $cartItems = [];
 
 // Fetch cart data
 $sql = "SELECT c.cartId, c.cartPrice FROM CART c WHERE c.userId = ?";
-$stmt = $conn->prepare($sql);
+$stmt = $mysqli->prepare($sql);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -42,7 +42,7 @@ $stmt->close();
     <div class="col-md-8">
         <form action="php/process_order.php" method="POST" id="checkoutForm">
             <h4>Delivery Method</h4>
-            <select name="deliveryMethod" id="deliveryMethod" class="form-control mb-3" required>
+            <select name="deliveryOption" id="deliveryMethod" class="form-control mb-3" required>
                 <option value="">Select...</option>
                 <option value="pickup">Pickup (Free)</option>
                 <option value="delivery">Delivery (R5.00, Free over R700)</option>
@@ -64,7 +64,7 @@ $stmt->close();
 </div>
 
 <script>
-document.getElementById("deliveryMethod").addEventListener("change", function() {
+document.getElementById("deliveryMethod").addEventListener("change", function () {
     const method = this.value;
     const addressField = document.getElementById("addressSection");
 
@@ -79,6 +79,6 @@ document.getElementById("deliveryMethod").addEventListener("change", function() 
 </script>
 
 <?php
-$conn->close();
+$mysqli->close();
 include 'includes/footer.php';
 ?>
