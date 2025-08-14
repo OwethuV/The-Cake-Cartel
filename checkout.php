@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'includes/header.php';
 include 'includes/db_connect.php';
 
@@ -20,72 +19,107 @@ $stmt->bind_param("i", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
 
-if ($result->num_rows === 0) {
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $totalCartValue += $row['cartPrice'];
+        $cartItems[] = $row['cartId'];
+    }
+} else {
     $_SESSION['message'] = "Your cart is empty. Cannot proceed to checkout.";
     header("Location: cart.php");
     exit();
 }
-
-while ($row = $result->fetch_assoc()) {
-    $totalCartValue += $row['cartPrice'];
-    $cartItems[] = $row['cartId'];
-}
 $stmt->close();
 
-// Default delivery cost
-$deliveryPrice = ($totalCartValue <= 700) ? 5.00 : 0.00;
+$deliveryPrice = 0.00;
+$deliveryMethod = $_POST['deliveryMethod'] ?? 'pickup';
+
+if ($deliveryMethod === 'delivery' && $totalCartValue < 700) {
+    $deliveryPrice = 5.00;
+}
+
 $finalTotalPrice = $totalCartValue + $deliveryPrice;
+
+// PayFast credentials (from .env)
+$merchant_id = getenv('PAYFAST_MERCHANT_ID');
+$merchant_key = getenv('PAYFAST_MERCHANT_KEY');
+$passphrase = getenv('PAYFAST_PASSPHRASE');
+$payfast_url = 'https://sandbox.payfast.co.za/eng/process';
+
+$item_name = 'Cake Order';
+$return_url = 'http://localhost/success.php';
+$cancel_url = 'http://localhost/cancel.php';
+$notify_url = 'http://localhost/ipn.php';
+
+$data = array(
+    'merchant_id' => $merchant_id,
+    'merchant_key' => $merchant_key,
+    'return_url' => $return_url,
+    'cancel_url' => $cancel_url,
+    'notify_url' => $notify_url,
+    'name_first' => $_SESSION['userName'] ?? 'Customer',
+    'email_address' => $_SESSION['userEmail'] ?? 'test@example.com',
+    'amount' => number_format($finalTotalPrice, 2, '.', ''),
+    'item_name' => $item_name,
+);
+
+// Add passphrase for signature if set
+$signature_data = [];
+foreach ($data as $key => $val) {
+    $signature_data[] = "$key=" . urlencode($val);
+}
+if (!empty($passphrase)) {
+    $signature_data[] = "passphrase=" . urlencode($passphrase);
+}
+$data['signature'] = md5(implode("&", $signature_data));
 ?>
 
-<div class="container mt-5">
-    <h2 class="mb-4">Checkout</h2>
+<h2 class="mb-4">Checkout</h2>
 
-    <?php if (isset($_SESSION['message'])): ?>
-        <div class="alert alert-info">
-            <?php echo htmlspecialchars($_SESSION['message']); unset($_SESSION['message']); ?>
-        </div>
-    <?php endif; ?>
+<?php if (isset($_SESSION['message'])): ?>
+    <div class="alert alert-info"><?= htmlspecialchars($_SESSION['message']) ?></div>
+    <?php unset($_SESSION['message']); ?>
+<?php endif; ?>
 
-    <div class="row">
-        <div class="col-md-8">
-            <h4>Order Summary</h4>
-            <ul class="list-group mb-3">
-                <li class="list-group-item d-flex justify-content-between lh-sm">
-                    <div><h6 class="my-0">Subtotal</h6></div>
-                    <span class="text-muted">R<?php echo number_format($totalCartValue, 2); ?></span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between lh-sm">
-                    <div>
-                        <h6 class="my-0">Delivery Fee</h6>
-                        <?php if ($deliveryPrice == 0): ?>
-                            <small class="text-success">Free (Order over R700)</small>
-                        <?php endif; ?>
-                    </div>
-                    <span class="text-muted">R<?php echo number_format($deliveryPrice, 2); ?></span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between">
-                    <span>Total (ZAR)</span>
-                    <strong>R<?php echo number_format($finalTotalPrice, 2); ?></strong>
-                </li>
-            </ul>
+<form method="POST" action="">
+    <div class="form-group mb-3">
+        <label for="deliveryMethod">Choose Delivery Option:</label>
+        <select name="deliveryMethod" id="deliveryMethod" class="form-control" onchange="this.form.submit()">
+            <option value="pickup" <?= ($deliveryMethod === 'pickup') ? 'selected' : '' ?>>Pickup (Free)</option>
+            <option value="delivery" <?= ($deliveryMethod === 'delivery') ? 'selected' : '' ?>>Delivery (R5 unless total > R700)</option>
+        </select>
+    </div>
+</form>
 
-            <form action="php/process_order.php" method="POST">
-                <input type="hidden" name="totalCartValue" value="<?php echo $totalCartValue; ?>">
-                <?php foreach ($cartItems as $cartId): ?>
-                    <input type="hidden" name="cartIds[]" value="<?php echo $cartId; ?>">
-                <?php endforeach; ?>
+<div class="row">
+    <div class="col-md-8">
+        <h4>Order Summary</h4>
+        <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+                <div><h6 class="my-0">Subtotal</h6></div>
+                <span class="text-muted">R<?= number_format($totalCartValue, 2) ?></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+                <div><h6 class="my-0">Delivery Fee</h6></div>
+                <span class="text-muted">R<?= number_format($deliveryPrice, 2) ?></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <strong>Total (ZAR)</strong>
+                <strong>R<?= number_format($finalTotalPrice, 2) ?></strong>
+            </li>
+        </ul>
 
-                <div class="mb-3">
-                    <label for="deliveryOption" class="form-label">Delivery Option</label>
-                    <select class="form-control" name="deliveryOption" required>
-                        <option value="pickup">Pickup (Free)</option>
-                        <option value="delivery">Delivery (R5.00 / Free if order > R700)</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-success btn-lg w-100">Place Order & Pay</button>
-            </form>
-        </div>
+        <form action="<?= htmlspecialchars($payfast_url) ?>" method="POST">
+            <?php foreach ($data as $key => $value): ?>
+                <input type="hidden" name="<?= htmlspecialchars($key) ?>" value="<?= htmlspecialchars($value) ?>">
+            <?php endforeach; ?>
+            <?php foreach ($cartItems as $cartId): ?>
+                <input type="hidden" name="cartIds[]" value="<?= $cartId ?>">
+            <?php endforeach; ?>
+            <input type="hidden" name="deliveryPrice" value="<?= $deliveryPrice ?>">
+            <input type="hidden" name="deliveryMethod" value="<?= $deliveryMethod ?>">
+            <button type="submit" class="btn btn-success btn-lg">Pay with PayFast</button>
+        </form>
     </div>
 </div>
 
