@@ -1,114 +1,123 @@
 <?php
 session_start();
-include '../includes/db_connect.php';
+require_once '../config/db_connect.php';  // Your secure DB connection file
 
-if (!isset($_SESSION['userId'])) {
-    $_SESSION['message'] = "Please login to place an order.";
-    header("Location: ../login.php");
-    exit();
+// Make sure user is logged in and userId is set
+if (!isset($_SESSION['user_id'])) {
+    die('User not logged in');
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $userId = $_SESSION['userId'];
-    $deliveryMethod = $_POST['deliveryMethod'];
-    $totalCartValue = floatval($_POST['totalCartValue']);
-    $cartIds = $_POST['cartIds'];
+$userId = $_SESSION['user_id'];
 
-    $deliveryPrice = 0;
-    $address = null;
+// Get POST data (example: delivery option, address, cart items, delivery price)
+$deliveryOption = $_POST['deliveryOption'] ?? 'pickup'; // 'pickup' or 'delivery'
+$address = $deliveryOption === 'delivery' ? trim($_POST['address'] ?? '') : null;
+$cartItems = $_POST['cartItems'] ?? []; // Expect array of items: ['productId' => ..., 'quantity' => ...]
+$deliveryPrice = 0.0;
 
-    if ($deliveryMethod === 'delivery') {
-        if ($totalCartValue < 700) {
-            $deliveryPrice = 5.00;
-        }
-        $address = trim($_POST['address']);
+// Calculate delivery price logic
+if ($deliveryOption === 'delivery') {
+    // Example delivery price logic: cap at R700, R5 otherwise
+    $subtotal = 0;
+    foreach ($cartItems as $item) {
+        // You might want to query product price from DB or trust posted price carefully
+        $productId = intval($item['productId']);
+        $quantity = intval($item['quantity']);
+
+        // Fetch price from DB (recommended)
+        $stmt = $mysqli->prepare("SELECT price FROM PRODUCTS WHERE productId = ?");
+        $stmt->bind_param('i', $productId);
+        $stmt->execute();
+        $stmt->bind_result($price);
+        $stmt->fetch();
+        $stmt->close();
+
+        $subtotal += $price * $quantity;
     }
 
-    $totalPrice = $totalCartValue + $deliveryPrice;
-
-    $conn->begin_transaction();
-    $success = true;
-
-    $stmt = $conn->prepare("INSERT INTO ORDERS (userId, deliveryPrice, totalPrice, status, address) VALUES (?, ?, ?, 'Pending', ?)");
-    $stmt->bind_param("idds", $userId, $deliveryPrice, $totalPrice, $address);
-
-    if (!$stmt->execute()) {
-        $success = false;
+    // Delivery price capped at 700+
+    if ($subtotal > 700) {
+        $deliveryPrice = 0;
     } else {
-        $orderId = $stmt->insert_id;
-
-        foreach ($cartIds as $cartId) {
-            $itemStmt = $conn->prepare("SELECT productId, quantity, cartPrice FROM CART WHERE cartId = ? AND userId = ?");
-            $itemStmt->bind_param("ii", $cartId, $userId);
-            $itemStmt->execute();
-            $itemResult = $itemStmt->get_result();
-
-            if ($itemResult->num_rows > 0) {
-                $item = $itemResult->fetch_assoc();
-                $productId = $item['productId'];
-                $quantity = $item['quantity'];
-                $price = $item['cartPrice'];
-
-                $orderItemStmt = $conn->prepare("INSERT INTO ORDER_ITEMS (orderId, productId, quantity, price) VALUES (?, ?, ?, ?)");
-                $orderItemStmt->bind_param("iiid", $orderId, $productId, $quantity, $price);
-
-                if (!$orderItemStmt->execute()) {
-                    $success = false;
-                    break;
-                }
-                $orderItemStmt->close();
-            }
-            $itemStmt->close();
-        }
-
-        if ($success) {
-            $placeholders = implode(',', array_fill(0, count($cartIds), '?'));
-            $deleteStmt = $conn->prepare("DELETE FROM CART WHERE userId = ? AND cartId IN ($placeholders)");
-            $types = str_repeat('i', count($cartIds) + 1);
-            $params = array_merge([$userId], $cartIds);
-            $deleteStmt->bind_param($types, ...$params);
-            if (!$deleteStmt->execute()) $success = false;
-            $deleteStmt->close();
-        }
+        $deliveryPrice = 5;
     }
+
+} else {
+    $address = null;
+    $deliveryPrice = 0;
+}
+
+// Calculate total price
+$totalPrice = 0;
+foreach ($cartItems as $item) {
+    $productId = intval($item['productId']);
+    $quantity = intval($item['quantity']);
+
+    // Get price again (or reuse from above)
+    $stmt = $mysqli->prepare("SELECT price FROM PRODUCTS WHERE productId = ?");
+    $stmt->bind_param('i', $productId);
+    $stmt->execute();
+    $stmt->bind_result($price);
+    $stmt->fetch();
     $stmt->close();
 
-    if ($success) {
-        $conn->commit();
+    $totalPrice += $price * $quantity;
+}
+$totalPrice += $deliveryPrice;
 
-        // Generate PayFast payment form
-        $pfData = [
-            'merchant_id' => $_ENV['PAYFAST_MERCHANT_ID'],
-            'merchant_key' => $_ENV['PAYFAST_MERCHANT_KEY'],
-            'return_url' => $_ENV['PAYFAST_RETURN_URL'],
-            'cancel_url' => $_ENV['PAYFAST_CANCEL_URL'],
-            'notify_url' => $_ENV['PAYFAST_NOTIFY_URL'],
-            'amount' => number_format($totalPrice, 2, '.', ''),
-            'item_name' => "Order #" . $orderId
-        ];
+// Insert order
+$stmt = $mysqli->prepare("INSERT INTO ORDERS (userId, deliveryPrice, totalPrice, status, createdAt, updatedAt) VALUES (?, ?, ?, 'Pending', NOW(), NOW())");
+$stmt->bind_param('idd', $userId, $deliveryPrice, $totalPrice);
 
-        $queryString = http_build_query($pfData);
-        $signature = md5($queryString . '&passphrase=' . $_ENV['PAYFAST_PASSPHRASE']);
-        $pfData['signature'] = $signature;
-
-        echo '<form action="https://www.payfast.co.za/eng/process" method="post" name="payfastForm">';
-        foreach ($pfData as $key => $val) {
-            echo '<input type="hidden" name="' . htmlspecialchars($key) . '" value="' . htmlspecialchars($val) . '">';
-        }
-        echo '<p>Redirecting to payment...</p>';
-        echo '<script>document.payfastForm.submit();</script>';
-        echo '</form>';
-
-    } else {
-        $conn->rollback();
-        $_SESSION['message'] = "Order failed.";
-        header("Location: ../checkout.php");
-    }
-
-    $conn->close();
-    exit();
+if (!$stmt->execute()) {
+    die("Error inserting order: " . $stmt->error);
 }
 
-$_SESSION['message'] = "Invalid request.";
-header("Location: ../cart.php");
-exit();
+$orderId = $stmt->insert_id;
+$stmt->close();
+
+// Insert order items
+$stmt = $mysqli->prepare("INSERT INTO ORDER_ITEMS (orderId, productId, quantity, price, createdAt) VALUES (?, ?, ?, ?, NOW())");
+
+foreach ($cartItems as $item) {
+    $productId = intval($item['productId']);
+    $quantity = intval($item['quantity']);
+
+    // Get price again (or reuse from above)
+    $stmtPrice = $mysqli->prepare("SELECT price FROM PRODUCTS WHERE productId = ?");
+    $stmtPrice->bind_param('i', $productId);
+    $stmtPrice->execute();
+    $stmtPrice->bind_result($price);
+    $stmtPrice->fetch();
+    $stmtPrice->close();
+
+    $itemTotalPrice = $price * $quantity;
+
+    $stmt->bind_param('iiid', $orderId, $productId, $quantity, $itemTotalPrice);
+    if (!$stmt->execute()) {
+        die("Error inserting order item: " . $stmt->error);
+    }
+}
+$stmt->close();
+
+// Optionally save address for user (if delivery)
+if ($address) {
+    $stmt = $mysqli->prepare("UPDATE USERS SET address = ? WHERE userId = ?");
+    $stmt->bind_param('si', $address, $userId);
+    $stmt->execute();
+    $stmt->close();
+}
+
+// Optionally clear user's cart here (if you have a CART table)
+$stmt = $mysqli->prepare("DELETE FROM CART WHERE userId = ?");
+$stmt->bind_param('i', $userId);
+$stmt->execute();
+$stmt->close();
+
+echo json_encode([
+    'success' => true,
+    'orderId' => $orderId,
+    'message' => 'Order placed successfully',
+]);
+
+?>
