@@ -1,6 +1,6 @@
 <?php
 include 'includes/header.php';
-include 'includes/db_connect.php'; // This sets $mysqli
+include 'includes/db_connect.php';
 
 if (!isset($_SESSION['userId'])) {
     $_SESSION['message'] = "Please login to checkout.";
@@ -14,7 +14,7 @@ $cartItems = [];
 
 // Fetch cart data
 $sql = "SELECT c.cartId, c.cartPrice FROM CART c WHERE c.userId = ?";
-$stmt = $mysqli->prepare($sql);
+$stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -79,6 +79,5 @@ document.getElementById("deliveryMethod").addEventListener("change", function ()
 </script>
 
 <?php
-$mysqli->close();
-include 'includes/footer.php';
-?>
+$conn->close();
+include 'includes/footer.php
