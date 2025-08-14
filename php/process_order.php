@@ -1,120 +1,101 @@
 <?php
 session_start();
-require_once '../includes/db_connect.php';
+require_once '../includes/db_connect.php';  // your DB connection
 
-header('Content-Type: application/json');
-
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['success' => false, 'message' => 'User not logged in']);
-    exit;
+// Check user logged in
+if (!isset($_SESSION['userId'])) {
+    http_response_code(401);
+    die(json_encode(['success' => false, 'message' => 'User not logged in']));
 }
 
-$userId = $_SESSION['user_id'];
-$deliveryOption = $_POST['deliveryOption'] ?? 'pickup';
-$address = $deliveryOption === 'delivery' ? trim($_POST['address'] ?? '') : null;
-$cartItems = $_POST['cartItems'] ?? [];
+$userId = $_SESSION['userId'];
 
-if (!is_array($cartItems) || empty($cartItems)) {
-    echo json_encode(['success' => false, 'message' => 'Cart is empty or invalid']);
-    exit;
-}
+// Get POST data
+$deliveryOption = $_POST['deliveryOption'] ?? 'pickup';  // pickup or delivery
+$address = ($deliveryOption === 'delivery') ? trim($_POST['address'] ?? '') : null;
+$cartItems = $_POST['cartItems'] ?? [];  // array of ['productId' => ..., 'quantity' => ...]
+$deliveryPrice = 0.0;
 
-$mysqli->begin_transaction();
+// Calculate subtotal
+$subtotal = 0.0;
+foreach ($cartItems as $item) {
+    $productId = intval($item['productId']);
+    $quantity = intval($item['quantity']);
 
-try {
-    // Prepare placeholders for IN clause and types string
-    $productIds = array_map(fn($item) => intval($item['productId']), $cartItems);
-    $placeholders = implode(',', array_fill(0, count($productIds), '?'));
-    $types = str_repeat('i', count($productIds));
-
-    // Fetch all product prices in one query
-    $stmt = $mysqli->prepare("SELECT productId, price FROM PRODUCTS WHERE productId IN ($placeholders)");
-    $stmt->bind_param($types, ...$productIds);
+    // Get product price from DB
+    $stmt = $mysqli->prepare("SELECT price FROM PRODUCTS WHERE productId = ?");
+    $stmt->bind_param('i', $productId);
     $stmt->execute();
-    $result = $stmt->get_result();
-
-    $productPrices = [];
-    while ($row = $result->fetch_assoc()) {
-        $productPrices[$row['productId']] = $row['price'];
-    }
-    $stmt->close();
-
-    // Verify all products are valid
-    foreach ($productIds as $pid) {
-        if (!isset($productPrices[$pid])) {
-            throw new Exception("Invalid product ID $pid");
-        }
-    }
-
-    // Calculate subtotal
-    $subtotal = 0;
-    foreach ($cartItems as $item) {
-        $pid = intval($item['productId']);
-        $qty = intval($item['quantity']);
-        $subtotal += $productPrices[$pid] * $qty;
-    }
-
-    // Calculate delivery price logic
-    $deliveryPrice = 0;
-    if ($deliveryOption === 'delivery') {
-        $deliveryPrice = ($subtotal > 700) ? 0 : 5;
-    }
-
-    $totalPrice = $subtotal + $deliveryPrice;
-
-    // Insert into ORDERS table
-    $stmt = $mysqli->prepare("INSERT INTO ORDERS (userId, deliveryPrice, totalPrice, status, createdAt, updatedAt) VALUES (?, ?, ?, 'Pending', NOW(), NOW())");
-    $stmt->bind_param('idd', $userId, $deliveryPrice, $totalPrice);
-    if (!$stmt->execute()) {
-        throw new Exception("Failed to insert order: " . $stmt->error);
-    }
-    $orderId = $stmt->insert_id;
-    $stmt->close();
-
-    // Insert order items
-    $stmt = $mysqli->prepare("INSERT INTO ORDER_ITEMS (orderId, productId, quantity, price, createdAt) VALUES (?, ?, ?, ?, NOW())");
-
-    foreach ($cartItems as $item) {
-        $pid = intval($item['productId']);
-        $qty = intval($item['quantity']);
-        $itemPrice = $productPrices[$pid] * $qty;
-
-        $stmt->bind_param('iiid', $orderId, $pid, $qty, $itemPrice);
-        if (!$stmt->execute()) {
-            throw new Exception("Failed to insert order item: " . $stmt->error);
-        }
-    }
-    $stmt->close();
-
-    // Update user address if delivery
-    if ($address) {
-        $stmt = $mysqli->prepare("UPDATE USERS SET address = ? WHERE userId = ?");
-        $stmt->bind_param('si', $address, $userId);
-        $stmt->execute();
+    $stmt->bind_result($price);
+    if (!$stmt->fetch()) {
         $stmt->close();
+        die(json_encode(['success' => false, 'message' => 'Invalid product ID']));
     }
-
-    // Clear user cart
-    $stmt = $mysqli->prepare("DELETE FROM CART WHERE userId = ?");
-    $stmt->bind_param('i', $userId);
-    $stmt->execute();
     $stmt->close();
 
-    // Commit transaction
-    $mysqli->commit();
-
-    echo json_encode([
-        'success' => true,
-        'orderId' => $orderId,
-        'message' => 'Order placed successfully',
-    ]);
-} catch (Exception $e) {
-    // Rollback on error
-    $mysqli->rollback();
-    echo json_encode([
-        'success' => false,
-        'message' => 'Order failed: ' . $e->getMessage(),
-    ]);
+    $subtotal += $price * $quantity;
 }
+
+// Delivery price logic
+if ($deliveryOption === 'delivery') {
+    $deliveryPrice = ($subtotal > 700) ? 0 : 5;
+} else {
+    $deliveryPrice = 0;
+    $address = null;
+}
+
+$totalPrice = $subtotal + $deliveryPrice;
+
+// Insert order
+$stmt = $mysqli->prepare("INSERT INTO ORDERS (userId, deliveryPrice, totalPrice, status, createdAt, updatedAt) VALUES (?, ?, ?, 'Pending', NOW(), NOW())");
+$stmt->bind_param('idd', $userId, $deliveryPrice, $totalPrice);
+if (!$stmt->execute()) {
+    die(json_encode(['success' => false, 'message' => 'Error inserting order: ' . $stmt->error]));
+}
+$orderId = $stmt->insert_id;
+$stmt->close();
+
+// Insert order items
+$stmt = $mysqli->prepare("INSERT INTO ORDER_ITEMS (orderId, productId, quantity, price, createdAt) VALUES (?, ?, ?, ?, NOW())");
+foreach ($cartItems as $item) {
+    $productId = intval($item['productId']);
+    $quantity = intval($item['quantity']);
+
+    // Get price again (for total price per item)
+    $stmtPrice = $mysqli->prepare("SELECT price FROM PRODUCTS WHERE productId = ?");
+    $stmtPrice->bind_param('i', $productId);
+    $stmtPrice->execute();
+    $stmtPrice->bind_result($price);
+    $stmtPrice->fetch();
+    $stmtPrice->close();
+
+    $itemTotalPrice = $price * $quantity;
+
+    $stmt->bind_param('iiid', $orderId, $productId, $quantity, $itemTotalPrice);
+    if (!$stmt->execute()) {
+        die(json_encode(['success' => false, 'message' => 'Error inserting order item: ' . $stmt->error]));
+    }
+}
+$stmt->close();
+
+// Update user address if delivery
+if ($address) {
+    $stmt = $mysqli->prepare("UPDATE USERS SET address = ? WHERE userId = ?");
+    $stmt->bind_param('si', $address, $userId);
+    $stmt->execute();
+    $stmt->close();
+}
+
+// Clear user's cart (optional)
+$stmt = $mysqli->prepare("DELETE FROM CART WHERE userId = ?");
+$stmt->bind_param('i', $userId);
+$stmt->execute();
+$stmt->close();
+
+// Return success response
+echo json_encode([
+    'success' => true,
+    'orderId' => $orderId,
+    'message' => 'Order placed successfully'
+]);
 ?>
