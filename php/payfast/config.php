@@ -8,7 +8,7 @@ if (!$envPath || !file_exists($envPath)) {
     die('.env file missing! Make sure it is in the project root.');
 }
 
-// Load .env lines
+
 $env = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
 foreach ($env as $line) {
