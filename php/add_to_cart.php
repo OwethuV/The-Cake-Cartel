@@ -8,16 +8,35 @@ if (!isset($_SESSION['userId'])) {
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $userId = $_SESSION['userId'];
-    $productId = $_POST['productId'];
-    $quantity = $_POST['quantity'];
-    $price = $_POST['price']; // Price of a single product
 
-    // Calculating total price for this item
+    // Verify user exists
+    $checkUser = $conn->prepare("SELECT userId FROM USERS WHERE userId = ?");
+    $checkUser->bind_param("i", $userId);
+    $checkUser->execute();
+    $checkUser->store_result();
+    if ($checkUser->num_rows === 0) {
+        $_SESSION['message'] = "User account not found.";
+        header("Location: ../login.php");
+        exit();
+    }
+    $checkUser->close();
+
+    // Validate input
+    $productId = isset($_POST['productId']) ? (int)$_POST['productId'] : 0;
+    $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 0;
+    $price = isset($_POST['price']) ? (float)$_POST['price'] : 0.0;
+
+    if ($productId <= 0 || $quantity <= 0 || $price <= 0) {
+        $_SESSION['message'] = "Invalid input data.";
+        header("Location: ../products.php");
+        exit();
+    }
+
     $cartPrice = $quantity * $price;
 
-    // Check if the product is already in the cart for this user
+    // Check if product already exists in user's cart
     $stmt = $conn->prepare("SELECT cartId, quantity, cartPrice FROM CART WHERE userId = ? AND productId = ?");
     $stmt->bind_param("ii", $userId, $productId);
     $stmt->execute();
@@ -26,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->fetch();
 
     if ($stmt->num_rows > 0) {
-        // UPDATE existing cart item
+        // Update existing cart item
         $newQuantity = $existingQuantity + $quantity;
         $newCartPrice = $existingCartPrice + $cartPrice;
         $update_stmt = $conn->prepare("UPDATE CART SET quantity = ?, cartPrice = ? WHERE cartId = ?");
@@ -48,12 +67,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $insert_stmt->close();
     }
+
     $stmt->close();
     $conn->close();
 
-    header("Location: ../products.php"); // Redirecting back to product page
+    header("Location: ../products.php");
     exit();
 } else {
-    header("Location: ../index.php"); // Redirecting if accessed directly
+    header("Location: ../index.php");
     exit();
 }

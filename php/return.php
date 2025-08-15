@@ -1,15 +1,8 @@
 <?php
 session_start();
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Payment Successful</title>
-</head>
-<body>
-    <h1>🎉 Thank You!</h1>
-    <p>Your payment was successful. We’ll start preparing your order shortly.</p>
-    <a href="products.php">Back to Shop</a>
-</body>
-</html>
+
+// You can show order confirmation here or redirect to a thank you page
+
+echo "<h1>Thank you for your payment!</h1>";
+echo "<p>Your order has been placed successfully and payment processed.</p>";
+echo "<a href='/'>Return to homepage</a>";
