@@ -1,88 +1,106 @@
 <?php
 session_start();
-include '../includes/db_connect.php';
+require_once '../includes/db_connect.php';
+require_once '../vendor/autoload.php';
+
+$merchant_id = $_ENV['PAYFAST_MERCHANT_ID'];
+$merchant_key = $_ENV['PAYFAST_MERCHANT_KEY'];
+$return_url = $_ENV['PAYFAST_RETURN_URL'];
+$cancel_url = $_ENV['PAYFAST_CANCEL_URL'];
+$notify_url = $_ENV['PAYFAST_NOTIFY_URL'];
 
 if (!isset($_SESSION['userId'])) {
-    $_SESSION['message'] = "Please login to place an order.";
     header("Location: ../login.php");
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cartIds'])) {
-    $userId = $_SESSION['userId'];
-    $cartIds = $_POST['cartIds']; // Array of cartIds
-    $deliveryPrice = $_POST['deliveryPrice'];
-    $totalPrice = $_POST['totalPrice'];
+$userId = $_SESSION['userId'];
+$deliveryOption = $_POST['deliveryMethod'] ?? 'pickup';
+$address = ($deliveryOption === 'delivery') ? trim($_POST['address'] ?? '') : null;
+$totalCartValue = floatval($_POST['totalCartValue'] ?? 0);
+$cartIds = $_POST['cartIds'] ?? [];
 
-    // Start a transaction
-    $conn->begin_transaction();
-    $order_success = true;
-
-    // Insert into ORDERS table
-    $stmt = $conn->prepare("INSERT INTO ORDERS (userId, deliveryPrice, totalPrice, status) VALUES (?, ?, ?, 'Pending')");
-    $stmt->bind_param("idd", $userId, $deliveryPrice, $totalPrice);
-    
-    if (!$stmt->execute()) {
-        $order_success = false;
-        $_SESSION['message'] = "Error placing order: " . $stmt->error;
-    } else {
-        $orderId = $stmt->insert_id; // Get the last inserted order ID
-
-        // Now insert each cart item into ORDER_ITEMS
-        foreach ($cartIds as $cartId) {
-            // Fetch product details from CART
-            $item_stmt = $conn->prepare("SELECT productId, quantity, cartPrice FROM CART WHERE cartId = ? AND userId = ?");
-            $item_stmt->bind_param("ii", $cartId, $userId);
-            $item_stmt->execute();
-            $item_result = $item_stmt->get_result();
-
-            if ($item_result->num_rows > 0) {
-                $item = $item_result->fetch_assoc();
-                $productId = $item['productId'];
-                $quantity = $item['quantity'];
-                $price = $item['cartPrice'];
-
-                // Insert into ORDER_ITEMS table
-                $order_item_stmt = $conn->prepare("INSERT INTO ORDER_ITEMS (orderId, productId, quantity, price) VALUES (?, ?, ?, ?)");
-                $order_item_stmt->bind_param("iiid", $orderId, $productId, $quantity, $price);
-                
-                if (!$order_item_stmt->execute()) {
-                    $order_success = false;
-                    $_SESSION['message'] = "Error adding item to order: " . $order_item_stmt->error;
-                    break;
-                }
-                $order_item_stmt->close();
-            }
-            $item_stmt->close();
-        }
-
-        // After successful order, remove items from CART
-        if ($order_success) {
-            $delete_stmt = $conn->prepare("DELETE FROM CART WHERE userId = ? AND cartId IN (" . implode(',', array_fill(0, count($cartIds), '?')) . ")");
-            $delete_stmt->bind_param(str_repeat('i', count($cartIds)), ...$cartIds);
-            if (!$delete_stmt->execute()) {
-                $order_success = false;
-                $_SESSION['message'] = "Error clearing cart items: " . $delete_stmt->error;
-            }
-            $delete_stmt->close();
-        }
-    }
-    $stmt->close();
-
-    if ($order_success) {
-        $conn->commit();
-        $_SESSION['message'] = "Your order has been placed successfully!";
-        header("Location: ../products.php"); // Redirect to products page
-    } else {
-        $conn->rollback();
-        header("Location: ../checkout.php"); // Redirect back to checkout with error
-    }
-
-    $conn->close();
-    exit();
-
-} else {
-    $_SESSION['message'] = "Invalid request to process order.";
-    header("Location: ../cart.php");
-    exit();
+if (empty($cartIds)) {
+    die("Cart is empty.");
 }
+
+$deliveryPrice = ($deliveryOption === 'delivery' && $totalCartValue <= 700) ? 5.00 : 0.00;
+$totalPrice = $totalCartValue + $deliveryPrice;
+
+// Save address
+if ($address) {
+    $stmt = $conn->prepare("UPDATE USERS SET address = ? WHERE userId = ?");
+    $stmt->bind_param('si', $address, $userId);
+    $stmt->execute();
+    $stmt->close();
+}
+
+// Create order
+$stmt = $conn->prepare("INSERT INTO ORDERS (userId, deliveryPrice, totalPrice, status, createdAt, updatedAt) VALUES (?, ?, ?, 'Pending', NOW(), NOW())");
+$stmt->bind_param('idd', $userId, $deliveryPrice, $totalPrice);
+$stmt->execute();
+$orderId = $stmt->insert_id;
+$stmt->close();
+
+// Order items
+foreach ($cartIds as $cartId) {
+    $stmt = $conn->prepare("SELECT productId, quantity, cartPrice FROM CART WHERE cartId = ? AND userId = ?");
+    $stmt->bind_param('ii', $cartId, $userId);
+    $stmt->execute();
+    $stmt->bind_result($productId, $quantity, $price);
+    if ($stmt->fetch()) {
+        $stmt->close();
+        $insertItem = $conn->prepare("INSERT INTO ORDER_ITEMS (orderId, productId, quantity, price, createdAt) VALUES (?, ?, ?, ?, NOW())");
+        $insertItem->bind_param('iiid', $orderId, $productId, $quantity, $price);
+        $insertItem->execute();
+        $insertItem->close();
+    } else {
+        $stmt->close();
+    }
+}
+
+// Clear cart
+$placeholders = implode(',', array_fill(0, count($cartIds), '?'));
+$types = str_repeat('i', count($cartIds)) . 'i';
+$cartIds[] = $userId;
+$stmt = $conn->prepare("DELETE FROM CART WHERE cartId IN ($placeholders) AND userId = ?");
+$stmt->bind_param($types, ...$cartIds);
+$stmt->execute();
+$stmt->close();
+
+// ✅ Prepare PayFast data
+$pfData = [
+    'merchant_id' => $merchant_id,
+    'merchant_key' => $merchant_key,
+    'return_url' => $return_url,
+    'cancel_url' => $cancel_url,
+    'notify_url' => $notify_url,
+    'm_payment_id' => $orderId,
+    'amount' => number_format($totalPrice, 2, '.', ''),
+    'item_name' => "Order #$orderId - DessertECommerce",
+];
+
+// ✅ Signature generation (MUST BE IN THE EXACT ORDER)
+ksort($pfData);
+$pfParamString = "";
+foreach ($pfData as $key => $val) {
+    $pfParamString .= $key . '=' . urlencode(trim($val)) . '&';
+}
+$pfParamString = rtrim($pfParamString, '&');
+$pfSignature = md5($pfParamString);
+$pfData['signature'] = $pfSignature;
+
+// ✅ Submit to PayFast
+$payfastUrl = "https://www.payfast.co.za/eng/process";
+
+echo '<html><body>';
+echo '<form id="payfastForm" action="' . htmlspecialchars($payfastUrl) . '" method="post">';
+foreach ($pfData as $key => $value) {
+    echo '<input type="hidden" name="' . htmlspecialchars($key) . '" value="' . htmlspecialchars($value) . '">';
+}
+echo '</form>';
+echo '<script>document.getElementById("payfastForm").submit();</script>';
+echo '</body></html>';
+$conn->close();
+exit();
+?>

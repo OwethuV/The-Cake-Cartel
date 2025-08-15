@@ -3,16 +3,15 @@ include 'includes/header.php';
 include 'includes/db_connect.php';
 
 if (!isset($_SESSION['userId'])) {
-    $_SESSION['message'] = "Please login to checkout."; //just in case they made it this far
+    $_SESSION['message'] = "Please login to checkout.";
     header("Location: login.php");
     exit();
-} 
+}
 
 $userId = $_SESSION['userId'];
 $totalCartValue = 0;
 $cartItems = [];
 
-// Fetching cart items to calculate total
 $sql = "SELECT c.cartId, c.cartPrice FROM CART c WHERE c.userId = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userId);
@@ -20,67 +19,63 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $totalCartValue += $row['cartPrice'];
-        $cartItems[] = $row['cartId']; // Collect cartIds for order creation
+        $cartItems[] = $row['cartId'];
     }
 } else {
-    $_SESSION['message'] = "Your cart is empty. Cannot proceed to checkout.";
+    $_SESSION['message'] = "Your cart is empty.";
     header("Location: cart.php");
     exit();
 }
 $stmt->close();
-
-// For simplicity, assume a fixed delivery price
-$deliveryPrice = 5.00;
-$finalTotalPrice = $totalCartValue + $deliveryPrice;
 ?>
 
 <h2 class="mb-4">Checkout</h2>
 
-<?php
-if (isset($_SESSION['message'])) {
-    echo '<div class="alert alert-info">' . htmlspecialchars($_SESSION['message']) . '</div>';
-    unset($_SESSION['message']);
-}
-?>
+<?php if (isset($_SESSION['message'])): ?>
+    <div class="alert alert-info"><?php echo htmlspecialchars($_SESSION['message']); unset($_SESSION['message']); ?></div>
+<?php endif; ?>
 
 <div class="row">
     <div class="col-md-8">
-        <h4>Order Summary</h4>
-        <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div>
-                    <h6 class="my-0">Subtotal</h6>
-                </div>
-                <span class="text-muted">R<?php echo number_format($totalCartValue, 2); ?></span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-                <div>
-                    <h6 class="my-0">Delivery Fee</h6>
-                </div>
-                <span class="text-muted">R<?php echo number_format($deliveryPrice, 2); ?></span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-                <span>Total (ZAR)</span>
-                <strong>R<?php echo number_format($finalTotalPrice, 2); ?></strong>
-            </li>
-        </ul>
+        <form action="php/process_order.php" method="POST" id="checkoutForm">
+            <h4>Delivery Method</h4>
+            <select name="deliveryMethod" id="deliveryMethod" class="form-control mb-3" required>
+                <option value="">Select...</option>
+                <option value="pickup">Pickup (Free)</option>
+                <option value="delivery">Delivery (R5.00, Free over R700)</option>
+            </select>
 
-        <h4>Delivery Information</h4>
-        <p>This is where you would typically have a form for delivery address, payment method selection, etc.</p>
-        <p>For this example, we'll assume the user's registered address is used and payment is "on delivery".</p>
+            <div id="addressSection" style="display: none;">
+                <label for="address">Delivery Address</label>
+                <textarea name="address" id="address" class="form-control mb-3" placeholder="Enter delivery address..."></textarea>
+            </div>
 
-        <form action="php/process_order.php" method="POST">
-            <input type="hidden" name="totalPrice" value="<?php echo $finalTotalPrice; ?>">
-            <input type="hidden" name="deliveryPrice" value="<?php echo $deliveryPrice; ?>">
+            <input type="hidden" name="totalCartValue" value="<?php echo htmlspecialchars($totalCartValue); ?>">
             <?php foreach ($cartItems as $cartId): ?>
-                <input type="hidden" name="cartIds[]" value="<?php echo $cartId; ?>">
+                <input type="hidden" name="cartIds[]" value="<?php echo htmlspecialchars($cartId); ?>">
             <?php endforeach; ?>
+
             <button type="submit" class="btn btn-success btn-lg">Place Order</button>
         </form>
     </div>
 </div>
+
+<script>
+document.getElementById("deliveryMethod").addEventListener("change", function () {
+    const method = this.value;
+    const addressField = document.getElementById("addressSection");
+
+    if (method === "delivery") {
+        addressField.style.display = "block";
+        document.getElementById("address").setAttribute("required", "required");
+    } else {
+        addressField.style.display = "none";
+        document.getElementById("address").removeAttribute("required");
+    }
+});
+</script>
 
 <?php
 $conn->close();
