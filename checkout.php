@@ -12,7 +12,6 @@ $userId = $_SESSION['userId'];
 $totalCartValue = 0;
 $cartItems = [];
 
-// Fetch cart data
 $sql = "SELECT c.cartId, c.cartPrice FROM CART c WHERE c.userId = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $userId);
@@ -42,7 +41,7 @@ $stmt->close();
     <div class="col-md-8">
         <form action="php/process_order.php" method="POST" id="checkoutForm">
             <h4>Delivery Method</h4>
-            <select name="deliveryOption" id="deliveryMethod" class="form-control mb-3" required>
+            <select name="deliveryMethod" id="deliveryMethod" class="form-control mb-3" required>
                 <option value="">Select...</option>
                 <option value="pickup">Pickup (Free)</option>
                 <option value="delivery">Delivery (R5.00, Free over R700)</option>
@@ -53,9 +52,9 @@ $stmt->close();
                 <textarea name="address" id="address" class="form-control mb-3" placeholder="Enter delivery address..."></textarea>
             </div>
 
-            <input type="hidden" name="totalCartValue" value="<?php echo $totalCartValue; ?>">
+            <input type="hidden" name="totalCartValue" value="<?php echo htmlspecialchars($totalCartValue); ?>">
             <?php foreach ($cartItems as $cartId): ?>
-                <input type="hidden" name="cartIds[]" value="<?php echo $cartId; ?>">
+                <input type="hidden" name="cartIds[]" value="<?php echo htmlspecialchars($cartId); ?>">
             <?php endforeach; ?>
 
             <button type="submit" class="btn btn-success btn-lg">Place Order</button>
