@@ -2,11 +2,11 @@
 session_start();
 include 'includes/header.php';
 
-// Clear session data related to user authentication
+
 if (isset($_SESSION['user_id'])) {
     unset($_SESSION['user_id']);
 }
-// Redirect to homepage if already logged in (just in case)
+
 if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
@@ -176,7 +176,7 @@ if (isset($_SESSION['user_id'])) {
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <meta name="google-signin-client_id"
         content="139900539257-dojbov6kpd0s8rv58g83n7as14dt681v.apps.googleusercontent.com">
-    <!-- Replace with your Client ID -->
+   
 </head>
 
 <body>

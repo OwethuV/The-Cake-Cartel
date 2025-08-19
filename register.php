@@ -2,11 +2,11 @@
 session_start();
 include 'includes/header.php';
 
-// Clear session data related to user authentication
+
 if (isset($_SESSION['user_id'])) {
     unset($_SESSION['user_id']);
 }
-// Redirect to homepage if already registered
+
 if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
@@ -18,11 +18,11 @@ if (isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | The Cake Cartel</title>
-    <!-- Bootstrap CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
+    
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -161,7 +161,7 @@ if (isset($_SESSION['user_id'])) {
                     <?php unset($_SESSION['message']); ?>
                 <?php endif; ?>
                 
-                <!-- Registration Form -->
+               
                 <form action="php/register.php" method="POST">
                     <div class="mb-3">
                         <label for="name" class="form-label">Full Name</label>
@@ -199,7 +199,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <?php include 'includes/footer.php'; ?>

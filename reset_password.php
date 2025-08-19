@@ -5,7 +5,7 @@ require '../includes/db_connect.php';
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
 
-    // Check if the token is valid
+
     $stmt = $conn->prepare("SELECT email FROM password_resets WHERE token = ? AND expires > ?");
     $expires = date("U");
     $stmt->bind_param("si", $token, $expires);

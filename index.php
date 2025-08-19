@@ -1114,7 +1114,7 @@ $result = $conn->query($sql);
                         <i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                         <i class="far fa-star"></i>
                     </div>
-                    <p>Red velvet cupcakes were amazing! But they sold out fast 😅</p>
+                    <p>Red velvet cupcakes were amazing! But they sold out fast</p>
                 </div>
 
                 <div class="review-box">
@@ -1189,6 +1189,8 @@ $result = $conn->query($sql);
         </div>
     </section>
 
+
+
     <section id="location" class="map-section">
         <h2>Visit Us in Cape Town CBD</h2>
         <p>We are located in the heart of Cape Town's city center. Come indulge in our delicious cakes!</p>
@@ -1208,78 +1210,22 @@ $result = $conn->query($sql);
   <p><i>We are currently in partnership with:</i></p>
   <div class="logo-slider">
     <div class="slide-track">
-      <div class="slide"><img src="images/shoprite-logo.jpg" alt="Supermarket 1"></div>
-      <div class="slide"><img src="images/checkers-logo-1.png" alt="Supermarket 2"></div>
-      <div class="slide"><img src="images/picknpay-logo-1.svg" alt="Supermarket 3"></div>
-      <div class="slide"><img src="images/boxers-logo-1.jpg" alt="Supermarket 4"></div>
-      <div class="slide"><img src="images/shoprite-logo.jpg" alt="Supermarket 1"></div>
-      <div class="slide"><img src="images/checkers-logo-1.png" alt="Supermarket 2"></div>
-      <div class="slide"><img src="images/picknpay-logo-1.svg" alt="Supermarket 3"></div>
-      <div class="slide"><img src="images/boxers-logo-1.jpg" alt="Supermarket 4"></div>
-      <div class="slide"><img src="images/shoprite-logo.jpg" alt="Supermarket 1"></div>
-      <div class="slide"><img src="images/checkers-logo-1.png" alt="Supermarket 2"></div>
-      <div class="slide"><img src="images/picknpay-logo-1.svg" alt="Supermarket 3"></div>
-      <div class="slide"><img src="images/boxers-logo-1.jpg" alt="Supermarket 4"></div>
+      <div class="slide"><img src="img/shoprite-logo.jpg" alt="Supermarket 1"></div>
+      <div class="slide"><img src="img/checkers-logo-1.png" alt="Supermarket 2"></div>
+      <div class="slide"><img src="img/picknpay-logo-1.svg" alt="Supermarket 3"></div>
+      <div class="slide"><img src="img/boxers-logo-1.jpg" alt="Supermarket 4"></div>
+      <div class="slide"><img src="img/shoprite-logo.jpg" alt="Supermarket 1"></div>
+      <div class="slide"><img src="img/checkers-logo-1.png" alt="Supermarket 2"></div>
+      <div class="slide"><img src="img/picknpay-logo-1.svg" alt="Supermarket 3"></div>
+      <div class="slide"><img src="img/boxers-logo-1.jpg" alt="Supermarket 4"></div>
+      <div class="slide"><img src="img/shoprite-logo.jpg" alt="Supermarket 1"></div>
+      <div class="slide"><img src="img/checkers-logo-1.png" alt="Supermarket 2"></div>
+      <div class="slide"><img src="img/picknpay-logo-1.svg" alt="Supermarket 3"></div>
+      <div class="slide"><img src="img/boxers-logo-1.jpg" alt="Supermarket 4"></div>
     </div>
   </div>
 </section>
 
-
-
-
-<!-- Trigger Button -->
-<button id="openPolicies" class="policy-btn">VIEW OUR POLICIES</button>
-
-<!-- Modal Structure -->
-<div id="policyModal" class="modal hidden">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Our Policies</h2>
-
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tablink active" data-tab="terms">Terms of Service</button>
-      <button class="tablink" data-tab="privacy">Privacy Policy</button>
-      <button class="tablink" data-tab="refund">Refund Policy</button>
-      <button class="tablink" data-tab="allergen">Allergen Info</button>
-    </div>
-
-    <!-- Tab Content -->
-    <div id="terms" class="tabcontent active">
-      <p><strong>Welcome to The Cake Cartel!</strong><br>
-      By placing an order with us, you agree to the following terms:  
-      • Orders subject to product availability.  <br>
-      • Prices may change without notice, but you pay the price agreed at checkout.  <br>
-      • Custom cake orders: 48hrs notice + 50% deposit.  <br>
-      • We reserve the right to decline orders not meeting our quality standards.  <br>
-      • Cakes are intended for immediate consumption or proper storage.  <br>
-      • We are not liable for mishandling after pickup/delivery.</p>
-    </div>
-
-    <div id="privacy" class="tabcontent">
-      <p><strong>Your privacy matters to us.</strong><br>
-      • We collect only info needed to process your order.  <br>
-      • Payment info handled securely by our provider; we don’t store card details.  <br>
-      • We may use your email for order updates or promos (unsubscribe anytime).  <br>
-      • Your data is never sold or shared except to fulfill your order.</p>
-    </div>
-
-    <div id="refund" class="tabcontent">
-      <p><strong>We want you to love every bite!</strong><br>
-      • Contact us within 24hrs if you’re unhappy.  <br>
-      • Refunds/replacements require proof of purchase.  <br>
-      • Returns not accepted unless damaged/incorrect.  <br>
-      • Custom deposits non-refundable if canceled 48hrs before pickup/delivery.</p>
-    </div>
-
-    <div id="allergen" class="tabcontent">
-      <p><strong>Food safety is our priority.</strong><br>
-      • Made in a kitchen that handles nuts, wheat, dairy, soy, and eggs.  <br>
-      • We cannot guarantee allergen-free products.  <br>
-      • Please inform us of allergies when ordering.</p>
-    </div>
-  </div>
-</div>
 
 
     <footer class="site-footer footer" id="footer">
@@ -1325,13 +1271,11 @@ $result = $conn->query($sql);
                 <div class="footer-socials">
                     <h4>Follow Us</h4>
                     <div class="social-icons">
-                        <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i
-                                class="fab fa-facebook-f"></i></a>
-                        <a href="https://tiktok.com" target="_blank" aria-label="TikTok"><i
+                        <a href="https://www.tiktok.com/@thecakecartel0" target="_blank" aria-label="TikTok"><i
                                 class="fab fa-tiktok"></i></a>
-                        <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i
+                        <a href="https://www.instagram.com/thecakecartel11/" target="_blank" aria-label="Instagram"><i
                                 class="fab fa-instagram"></i></a>
-                        <a href="https://wa.me/1234567890" target="_blank" aria-label="WhatsApp"><i
+                        <a href="https://wa.me/0748403931" target="_blank" aria-label="WhatsApp"><i
                                 class="fab fa-whatsapp"></i></a>
                         <a href="mailto:thecakecartel@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
                     </div>

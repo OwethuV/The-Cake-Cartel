@@ -244,12 +244,12 @@ include 'includes/header.php';
                     <p class="contact-subtitle">Have a question, feedback or a special request? We'd love to hear from
                         you!</p>
                 </div>
-                <!-- Display the session message -->
+                
                 <?php if (isset($_SESSION['message'])): ?>
                     <div class="alert alert-info" style="text-align: center; margin-bottom: 20px;">
                         <?php
                         echo $_SESSION['message'];
-                        unset($_SESSION['message']); // Clear the message after displaying it
+                        unset($_SESSION['message']);
                         ?>
                     </div>
                 <?php endif; ?>
@@ -346,7 +346,7 @@ include 'includes/header.php';
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <?php

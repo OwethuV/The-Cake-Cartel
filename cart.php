@@ -11,7 +11,7 @@ if (!isset($_SESSION['userId'])) {
 $userId = $_SESSION['userId'];
 $totalCartValue = 0;
 
-// Fetch cart items for the logged-in user
+
 $sql = "SELECT c.cartId, p.productId, p.productName, p.productImg, p.price AS unitPrice, c.quantity, c.cartPrice
         FROM CART c
         JOIN PRODUCTS p ON c.productId = p.productId
@@ -27,12 +27,12 @@ $result = $stmt->get_result();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Cart | The Cake Cartel</title>
-    <!-- Google Fonts & Icons -->
+    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600&family=Quicksand:wght@500;600&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Bootstrap CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         * {
@@ -309,7 +309,7 @@ $result = $stmt->get_result();
         </div>
     </div>
     
-    <!-- Bootstrap Bundle JS -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

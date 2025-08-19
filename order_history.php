@@ -10,7 +10,7 @@ if (!isset($_SESSION['userId'])) {
 
 $userId = $_SESSION['userId'];
 
-// Fetch orders for the logged-in user
+
 $stmt = $conn->prepare("SELECT o.orderId, o.deliveryPrice, o.totalPrice, o.status, o.createdAt,
                                oi.productId, p.productName, p.productImg, oi.quantity, oi.price AS itemTotalPrice
                         FROM ORDERS o
@@ -23,7 +23,7 @@ $stmt->bind_param("i", $userId);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Group orders by orderId if multiple cart items belong to one logical order
+
 $orders = [];
 while ($row = $result->fetch_assoc()) {
     $orderId = $row['orderId'];

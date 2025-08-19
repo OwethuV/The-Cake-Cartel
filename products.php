@@ -3,7 +3,7 @@ session_start();
 include 'includes/header.php';
 include 'includes/db_connect.php';
 
-// Fetch all products from the database
+
 $sql = "SELECT * FROM PRODUCTS ORDER BY productName";
 $result = $conn->query($sql);
 ?>
@@ -196,7 +196,7 @@ $result = $conn->query($sql);
             <?php
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    // Truncate description to 70 characters and add ellipsis if necessary
+                    
                     $description = htmlspecialchars($row['description']);
                     $truncated_description = (strlen($description) > 70) ? substr($description, 0, 70) . '...' : $description;
                     ?>

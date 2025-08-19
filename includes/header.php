@@ -1,5 +1,5 @@
 <?php
-// Start session on every page that needs it
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -11,9 +11,9 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Cake Cartel</title>
-    <!-- Bootstrap CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
+    
     <style>
         * {
             margin: 0;
@@ -38,11 +38,11 @@ if (session_status() == PHP_SESSION_NONE) {
             background-color: #ff7e8a;
             padding: 10px 20px;
             color: #fff;
-            position: fixed; /* Keep navbar at the top of the page */
-            top: 0; /* Position navbar at the top */
-            left: 0; /* Position navbar at the left */
-            width: 100%; /* Make navbar full width */
-            z-index: 10; /* Ensure navbar is above other elements */
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            z-index: 10; 
         }
 
         .navbar-left {

@@ -11,7 +11,7 @@ include 'includes/header.php';
 //     exit();
 // }
 
-// If you're getting user data from a database instead:
+
 require_once 'includes/db_connect.php';
 
 
@@ -22,7 +22,7 @@ if ($user_id) {
     $user = $stmt->fetch();
 }
 
-// Initialize empty user array
+
 $user = [
     'name' => '',
     'email' => '',
@@ -58,14 +58,14 @@ if ($user_id) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile | The Cake Cartel</title>
-    <!-- Google Fonts & Icons -->
+   
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link
         href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600&family=Quicksand:wght@500;600&display=swap"
         rel="stylesheet">
-    <!-- Font Awesome -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Bootstrap CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         * {
@@ -291,7 +291,7 @@ if ($user_id) {
             ?>
 
             <div class="row g-4">
-                <!-- Profile Picture -->
+                
                 <div class="col-12 col-lg-4">
                     <div class="profile-picture-card">
                         <div class="profile-picture-container">
@@ -317,7 +317,7 @@ if ($user_id) {
                     </div>
                 </div>
 
-                <!-- Profile Information -->
+                
                 <div class="col-12 col-lg-8">
                     <div class="profile-info-box">
                         <h2 class="form-title">Personal Information</h2>
@@ -400,10 +400,10 @@ if ($user_id) {
         </div>
     </div>
 
-    <!-- Bootstrap Bundle JS -->
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Show file name and auto-submit when file is selected
+        
         document.getElementById('profile_picture').addEventListener('change', function () {
             if (this.files.length > 0) {
                 document.getElementById('submit-photo').click();
