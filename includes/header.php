@@ -94,14 +94,15 @@ if (session_status() == PHP_SESSION_NONE) {
                         <a class="nav-link" href="products.php">Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="cart.php">Cart</a>
+                        
+                        <a class="nav-link" href="cart.php"><i class="fas fa-shopping-cart"></i>Cart</a>
                     </li>
                     <?php if (isset($_SESSION['userId'])): ?>
                         <li class="nav-item">
                             <a class="nav-link" href="order_history.php">Order History</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="profile.php">My Profile</a> <!-- Profile link -->
+                            <a class="nav-link" href="profile.php"><i class="fas fa-user"></i>My Profile</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="php/logout.php"
@@ -111,14 +112,14 @@ if (session_status() == PHP_SESSION_NONE) {
                         </li>
                     <?php else: ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="login.php">Login</a>
+                            <a class="nav-link" href="login.php"><i class="fas fa-user"></i>Login</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="register.php">Register</a>
                         </li>
                     <?php endif; ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.php">Contact</a>
+                        <a class="nav-link" href="contact.php"><i class="fas fa-phone"></i>Contact</a>
                     </li>
                 </ul>
             </div>
