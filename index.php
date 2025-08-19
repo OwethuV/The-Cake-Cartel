@@ -857,6 +857,145 @@ $result = $conn->query($sql);
                 font-size: 20px;
             }
         }
+
+
+
+        .partners {
+  background: #fff;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.partners h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.logo-slider {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.slide-track {
+  display: flex;
+  animation: scroll 25s linear infinite;
+  width: calc(200px * 10);
+}
+
+.slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.slide img {
+  max-width: 120px;
+  height: auto;
+  filter: grayscale(40%);
+  transition: filter 0.3s;
+}
+
+.slide img:hover {
+  filter: grayscale(0%);
+}
+
+@keyframes scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+
+@media (max-width: 768px) {
+  .slide {
+    width: 150px;
+  }
+  .slide img {
+    max-width: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners h2 {
+    font-size: 1.5rem;
+  }
+  .slide {
+    width: 120px;
+  }
+  .slide img {
+    max-width: 70px;
+  }
+}
+
+
+.policy-btn{
+    border: none;
+    border-radius: 40px;
+    background-color: pink;
+    color: #000;
+    padding:20px;
+    box-shadow: 10px 10px 10px rgba(0,0,0,0.4);
+    cursor:pointer;
+    margin-left: 60px;
+    margin-bottom: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+}
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+.modal.hidden {
+     display: none; 
+}
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.close {
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.tablink {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+}
+.tablink.active {
+  background: #ff6f61;
+  color: white;
+}
+.tabcontent { display: none; }
+.tabcontent.active { display: block; }
+
+/* Mobile */
+@media (max-width: 500px) {
+  .tablink {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
     </style>
 </head>
 
@@ -1062,6 +1201,87 @@ $result = $conn->query($sql);
         </div>
     </section>
 
+
+
+    <section class="partners">
+  <h2>Our Distribution Partners</h2>
+  <p><i>We are currently in partnership with:</i></p>
+  <div class="logo-slider">
+    <div class="slide-track">
+      <div class="slide"><img src="images/shoprite-logo.jpg" alt="Supermarket 1"></div>
+      <div class="slide"><img src="images/checkers-logo-1.png" alt="Supermarket 2"></div>
+      <div class="slide"><img src="images/picknpay-logo-1.svg" alt="Supermarket 3"></div>
+      <div class="slide"><img src="images/boxers-logo-1.jpg" alt="Supermarket 4"></div>
+      <div class="slide"><img src="images/shoprite-logo.jpg" alt="Supermarket 1"></div>
+      <div class="slide"><img src="images/checkers-logo-1.png" alt="Supermarket 2"></div>
+      <div class="slide"><img src="images/picknpay-logo-1.svg" alt="Supermarket 3"></div>
+      <div class="slide"><img src="images/boxers-logo-1.jpg" alt="Supermarket 4"></div>
+      <div class="slide"><img src="images/shoprite-logo.jpg" alt="Supermarket 1"></div>
+      <div class="slide"><img src="images/checkers-logo-1.png" alt="Supermarket 2"></div>
+      <div class="slide"><img src="images/picknpay-logo-1.svg" alt="Supermarket 3"></div>
+      <div class="slide"><img src="images/boxers-logo-1.jpg" alt="Supermarket 4"></div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Trigger Button -->
+<button id="openPolicies" class="policy-btn">VIEW OUR POLICIES</button>
+
+<!-- Modal Structure -->
+<div id="policyModal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Our Policies</h2>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tablink active" data-tab="terms">Terms of Service</button>
+      <button class="tablink" data-tab="privacy">Privacy Policy</button>
+      <button class="tablink" data-tab="refund">Refund Policy</button>
+      <button class="tablink" data-tab="allergen">Allergen Info</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div id="terms" class="tabcontent active">
+      <p><strong>Welcome to The Cake Cartel!</strong><br>
+      By placing an order with us, you agree to the following terms:  
+      • Orders subject to product availability.  <br>
+      • Prices may change without notice, but you pay the price agreed at checkout.  <br>
+      • Custom cake orders: 48hrs notice + 50% deposit.  <br>
+      • We reserve the right to decline orders not meeting our quality standards.  <br>
+      • Cakes are intended for immediate consumption or proper storage.  <br>
+      • We are not liable for mishandling after pickup/delivery.</p>
+    </div>
+
+    <div id="privacy" class="tabcontent">
+      <p><strong>Your privacy matters to us.</strong><br>
+      • We collect only info needed to process your order.  <br>
+      • Payment info handled securely by our provider; we don’t store card details.  <br>
+      • We may use your email for order updates or promos (unsubscribe anytime).  <br>
+      • Your data is never sold or shared except to fulfill your order.</p>
+    </div>
+
+    <div id="refund" class="tabcontent">
+      <p><strong>We want you to love every bite!</strong><br>
+      • Contact us within 24hrs if you’re unhappy.  <br>
+      • Refunds/replacements require proof of purchase.  <br>
+      • Returns not accepted unless damaged/incorrect.  <br>
+      • Custom deposits non-refundable if canceled 48hrs before pickup/delivery.</p>
+    </div>
+
+    <div id="allergen" class="tabcontent">
+      <p><strong>Food safety is our priority.</strong><br>
+      • Made in a kitchen that handles nuts, wheat, dairy, soy, and eggs.  <br>
+      • We cannot guarantee allergen-free products.  <br>
+      • Please inform us of allergies when ordering.</p>
+    </div>
+  </div>
+</div>
+
+
     <footer class="site-footer footer" id="footer">
         <div class="footer-container">
             <div class="footer-left">
@@ -1129,5 +1349,6 @@ $result = $conn->query($sql);
 
     <script src="js/index.js"></script>
 </body>
+
 
 </html>
