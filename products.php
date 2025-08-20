@@ -350,13 +350,8 @@ $result = $conn->query($sql);
         <div class="product-grid products" id="products" style="display: none;">
             <?php
             if ($result->num_rows > 0) {
-<<<<<<< HEAD
-                while($row = $result->fetch_assoc()) {
-                    
-=======
                 while ($row = $result->fetch_assoc()) {
                     // Truncate description to 70 characters and add ellipsis if necessary
->>>>>>> 02db5b196fd4f384483f005493e9759d5bdf2ddb
                     $description = htmlspecialchars($row['description']);
                     $truncated_description = (strlen($description) > 70) ? substr($description, 0, 70) . '...' : $description;
                     ?>

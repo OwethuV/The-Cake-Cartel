@@ -11,9 +11,9 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Cake Cartel</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <style>
         * {
             margin: 0;
@@ -38,11 +38,11 @@ if (session_status() == PHP_SESSION_NONE) {
             background-color: #ff7e8a;
             padding: 10px 20px;
             color: #fff;
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            z-index: 10; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
         }
 
         .navbar-left {
@@ -73,10 +73,73 @@ if (session_status() == PHP_SESSION_NONE) {
             font-size: 1.5rem;
             cursor: pointer;
         }
+
+        /* Announcement Bar */
+        .announcement-bar {
+            background: #111;
+            /* dark background */
+            color: #fff;
+            /* white text */
+            font-size: 14px;
+            text-align: center;
+            overflow: hidden;
+            height: 40px;
+            /* height of the bar */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .announcement-wrapper {
+            animation: moveUp 5s linear infinite;
+        }
+
+        @keyframes moveUp {
+            0% {
+                transform: translateY(100%);
+                /* start below */
+                opacity: 0;
+            }
+
+            10% {
+                transform: translateY(0);
+                /* visible */
+                opacity: 1;
+            }
+
+            90% {
+                transform: translateY(0);
+                /* stay visible */
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100%);
+                /* move up & disappear */
+                opacity: 0;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .announcement-bar {
+                font-size: 12px;
+                height: 30px;
+                padding: 0 5px;
+            }
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        <div class="announcement-wrapper">
+            <p>🚚 Free Delivery when bill is over R 700.00</p>
+        </div>
+    </div>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.php"><img src="img\logo-removebg-preview.png" alt="The Cake Cartel"
@@ -94,7 +157,7 @@ if (session_status() == PHP_SESSION_NONE) {
                         <a class="nav-link" href="products.php">Products</a>
                     </li>
                     <li class="nav-item">
-                        
+
                         <a class="nav-link" href="cart.php"><i class="fas fa-shopping-cart"></i>Cart</a>
                     </li>
                     <?php if (isset($_SESSION['userId'])): ?>
