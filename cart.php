@@ -294,7 +294,7 @@ $result = $stmt->get_result();
 
                 <div class="cart-total text-end">
                     <h4>Total Cart Value: R<?php echo number_format($totalCartValue, 2); ?></h4>
-                    <a href="checkout.php" class="btn btn-success mt-3">
+                    <a href="checkoutt.php" class="btn btn-success mt-3">
                         <i class="fas fa-credit-card me-2"></i>Proceed to Checkout
                     </a>
                 </div>

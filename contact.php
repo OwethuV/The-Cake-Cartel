@@ -236,6 +236,8 @@ include 'includes/header.php';
 </head>
 
 <body>
+
+
     <div class="bakery-contact-wrapper">
         <div class="bakery-contact-container">
             <div class="bakery-contact-card">
