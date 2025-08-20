@@ -1008,7 +1008,7 @@ $result = $conn->query($sql);
         </video>
         <div class="overlay"></div>
         <div class="content">
-            <h1>WELCOME TO THE CAKE CARTEL WASSUP</h1>
+            <h1>WELCOME TO THE CAKE CARTEL</h1>
             <p>Bite Into Bliss</p>
             <button class="header-btn mt-5"><a href="products.php" style="color: black; text-decoration: none;">SHOP
                     NOW</a></button>

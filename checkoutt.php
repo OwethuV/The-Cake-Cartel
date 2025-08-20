@@ -252,7 +252,7 @@ $stmt->close();
                             <select name="deliveryMethod" id="deliveryMethod" class="form-control" required>
                                 <option value="">Select delivery method...</option>
                                 <option value="pickup">Pickup (Free)</option>
-                                <option value="delivery">Delivery (R5.00, Free over R700)</option>
+                                <option value="delivery">Delivery (R100.00, Free over R700)</option>
                             </select>
                         </div>
 
@@ -303,7 +303,7 @@ $stmt->close();
                 addressField.style.display = "block";
                 document.getElementById("address").setAttribute("required", "required");
                 
-                let deliveryFee = 5.00;
+                let deliveryFee = 100.00;
                 if (cartValue >= 700) {
                     deliveryFee = 0.00;
                 }

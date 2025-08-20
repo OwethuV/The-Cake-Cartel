@@ -24,7 +24,7 @@ if (empty($cartIds)) {
     die("Cart is empty.");
 }
 
-$deliveryPrice = ($deliveryOption === 'delivery' && $totalCartValue <= 700) ? 5.00 : 0.00;
+$deliveryPrice = ($deliveryOption === 'delivery' && $totalCartValue <= 700) ? 100.00 : 0.00;
 $totalPrice = $totalCartValue + $deliveryPrice;
 
 // Save address
