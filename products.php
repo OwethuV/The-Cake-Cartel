@@ -3,7 +3,7 @@ session_start();
 include 'includes/header.php';
 include 'includes/db_connect.php';
 
-
+// Fetch all products from the database
 $sql = "SELECT * FROM PRODUCTS ORDER BY productName";
 $result = $conn->query($sql);
 ?>
@@ -37,9 +37,9 @@ $result = $conn->query($sql);
 
         .skeleton-loader {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            /* 3 items per row */
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            /* Responsive grid */
+            gap: 20px;
             /* Space between items */
         }
 
@@ -81,6 +81,7 @@ $result = $conn->query($sql);
             /* Margin for spacing */
             animation: pulse 1.5s infinite;
             /* Animation for loading effect */
+            width: 120px;
         }
 
         @keyframes pulse {
@@ -95,6 +96,13 @@ $result = $conn->query($sql);
 
             100% {
                 background-color: #e0e0e0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .skeleton-image {
+                height: 200px;
+                /* Adjust height for smaller screens */
             }
         }
 
@@ -350,13 +358,8 @@ $result = $conn->query($sql);
         <div class="product-grid products" id="products" style="display: none;">
             <?php
             if ($result->num_rows > 0) {
-<<<<<<< HEAD
-                while($row = $result->fetch_assoc()) {
-                    
-=======
                 while ($row = $result->fetch_assoc()) {
                     // Truncate description to 70 characters and add ellipsis if necessary
->>>>>>> 02db5b196fd4f384483f005493e9759d5bdf2ddb
                     $description = htmlspecialchars($row['description']);
                     $truncated_description = (strlen($description) > 70) ? substr($description, 0, 70) . '...' : $description;
                     ?>
@@ -412,12 +415,12 @@ $result = $conn->query($sql);
         const skeletonLoader = document.getElementById('skeletonLoader');
         const productsContainer = document.getElementById('products');
         // Simulate loading products (you can remove this setTimeout in production)
-        setTimeout(function() {
+        setTimeout(function () {
             // Hide the skeleton loader
             skeletonLoader.style.display = 'none';
             // Show the products container
             productsContainer.style.display = 'grid'; // Change to grid display
-        }, 3000); // Simulate a 3-second loading time
+        }, 1000); // Simulate a 1-second loading time
     </script>
 </body>
 
