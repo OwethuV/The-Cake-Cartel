@@ -1189,23 +1189,7 @@ $result = $conn->query($sql);
         </div>
     </section>
 
-
-
-    <section id="location" class="map-section">
-        <h2>Visit Us in Cape Town CBD</h2>
-        <p>We are located in the heart of Cape Town's city center. Come indulge in our delicious cakes!</p>
-        <div class="map-container">
-            <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3309.9075128901214!2d18.418551!3d-33.924869!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1dcc676c7d6bff4f%3A0x2e5140ffb3252583!2sCape%20Town%20City%20Centre%2C%20Cape%20Town%2C%208000!5e0!3m2!1sen!2sza!4v1691416428239!5m2!1sen!2sza"
-                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-        </div>
-    </section>
-
-
-
-    <section class="partners">
+ <section class="partners">
   <h2>Our Distribution Partners</h2>
   <p><i>We are currently in partnership with:</i></p>
   <div class="logo-slider">
@@ -1225,6 +1209,18 @@ $result = $conn->query($sql);
     </div>
   </div>
 </section>
+
+    <section id="location" class="map-section">
+        <h2>Visit Us in Cape Town CBD</h2>
+        <p>We are located in the heart of Cape Town's city center. Come indulge in our delicious cakes!</p>
+        <div class="map-container">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3309.9075128901214!2d18.418551!3d-33.924869!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1dcc676c7d6bff4f%3A0x2e5140ffb3252583!2sCape%20Town%20City%20Centre%2C%20Cape%20Town%2C%208000!5e0!3m2!1sen!2sza!4v1691416428239!5m2!1sen!2sza"
+                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </section>
 
 
 
@@ -1296,3 +1292,4 @@ $result = $conn->query($sql);
 
 
 </html>
+
