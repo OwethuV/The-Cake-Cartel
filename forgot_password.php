@@ -153,7 +153,7 @@ include 'includes/header.php';
         .alert-info {
             background-color: #FFEBEE;
             border-color: #FFCDD2;
-            color: #C62828;
+            color: black;
         }
 
         @media (max-width: 768px) {

@@ -191,7 +191,6 @@ if (isset($_SESSION['user_id'])) {
                     <?php unset($_SESSION['message']); ?>
                 <?php endif; ?>
 
-                <div class="divider">login with email</div>
                 <form action="php/login.php" method="POST">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>

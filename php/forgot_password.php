@@ -34,12 +34,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->Password = "zxad jajd loql jbzr";
         $mail->Port = 587;
 
-        $mail->setFrom('your_email@gmail.com', 'The Cake Cartel');
+        $mail->setFrom('thecakecartel2025@gmail.com', 'The Cake Cartel');
         $mail->addAddress($email);
         $mail->Subject = 'Password Reset Request';
         $mail->isHTML(true);
         $mail->Body = "Hello $userName,<br><br>To reset your password, please click the link below:<br>
-                       <a href='http://localhost/redo/reset_password.php?token=$token'>Reset Password</a><br><br>
+                       <a href='http://localhost/the-cake-cartel/reset_password.php?token=$token'>Reset Password</a><br><br>
                        If you did not request a password reset, please ignore this email.";
 
         if ($mail->send()) {

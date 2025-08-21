@@ -46,7 +46,7 @@ if (session_status() == PHP_SESSION_NONE) {
             /* Position navbar at the left */
             width: 100%;
             /* Make navbar full width */
-            z-index: 10;
+            z-index: 30;
             /* Ensure navbar is above other elements */
         }
 
@@ -71,12 +71,6 @@ if (session_status() == PHP_SESSION_NONE) {
             color: #000;
             text-decoration: none;
             padding: 0.5rem;
-        }
-
-        .hamburger {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
         }
     </style>
 </head>

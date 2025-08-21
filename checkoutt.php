@@ -25,7 +25,7 @@ if ($result->num_rows > 0) {
     }
 } else {
     $_SESSION['message'] = "Your cart is empty.";
-    header("Location: cart.php");
+    header("Location: products.php");
     exit();
 }
 $stmt->close();
@@ -271,7 +271,8 @@ $stmt->close();
                             </div>
                             <div class="summary-item" id="deliveryFeeItem">
                                 <span>Delivery Fee:</span>
-                                <span>R0.00</span>
+                                <!-- if the option selected is delivery, a R100 delivery fee must be added but keep it R0.00 if not -->
+                                <span>R<?php echo ($totalCartValue >= 700) ? '0.00' : '100.00'; ?></span>
                             </div>
                             <div class="summary-total">
                                 <span>Total:</span>
@@ -304,7 +305,7 @@ $stmt->close();
                 document.getElementById("address").setAttribute("required", "required");
                 
                 let deliveryFee = 100.00;
-                if (cartValue >= 700) {
+                if (cartValue > 700) {
                     deliveryFee = 0.00;
                 }
                 

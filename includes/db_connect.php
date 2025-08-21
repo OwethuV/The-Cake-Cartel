@@ -6,9 +6,9 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 //Get database credentials from environment variables
 $servername = $_ENV['DB_HOST'];
-$username = $_ENV['DB_USERNAME'];
-$password = $_ENV['DB_PASSWORD'];
-$dbname = $_ENV['DB_DATABASE'];
+$username = $_ENV['DB_USER'];
+$password = $_ENV['DB_PASS'];
+$dbname = $_ENV['DB_NAME'];
 //Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 //Check connection

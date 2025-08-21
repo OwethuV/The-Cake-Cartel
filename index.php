@@ -694,7 +694,6 @@ $result = $conn->query($sql);
             font-size: 1rem;
             cursor: pointer;
             color: #ff7e8a;
-            ;
             padding: 0.5rem 1rem;
             border-bottom: 2px solid transparent;
         }
@@ -702,7 +701,6 @@ $result = $conn->query($sql);
         .modal-tabs button:hover,
         .modal-tabs button.active {
             border-color: #ff7e8a;
-            ;
         }
 
         /* Mobile */
@@ -861,141 +859,165 @@ $result = $conn->query($sql);
 
 
         .partners {
-  background: #fff;
-  padding: 40px 20px;
-  text-align: center;
-}
+            background: #fff;
+            padding: 40px 20px;
+            text-align: center;
+        }
 
-.partners h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
+        .partners h2 {
+            color: #ff7e8a; 
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
 
-.logo-slider {
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-}
+        .logo-slider {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
 
-.slide-track {
-  display: flex;
-  animation: scroll 25s linear infinite;
-  width: calc(200px * 10);
-}
+        .slide-track {
+            display: flex;
+            animation: scroll 25s linear infinite;
+            width: calc(200px * 10);
+        }
 
-.slide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 200px;
-  flex-shrink: 0;
-}
+        .slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            flex-shrink: 0;
+        }
 
-.slide img {
-  max-width: 120px;
-  height: auto;
-  filter: grayscale(40%);
-  transition: filter 0.3s;
-}
+        .slide img {
+            max-width: 120px;
+            height: auto;
+            filter: grayscale(40%);
+            transition: filter 0.3s;
+        }
 
-.slide img:hover {
-  filter: grayscale(0%);
-}
+        .slide img:hover {
+            filter: grayscale(0%);
+        }
 
-@keyframes scroll {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
 
-
-@media (max-width: 768px) {
-  .slide {
-    width: 150px;
-  }
-  .slide img {
-    max-width: 90px;
-  }
-}
-
-@media (max-width: 480px) {
-  .partners h2 {
-    font-size: 1.5rem;
-  }
-  .slide {
-    width: 120px;
-  }
-  .slide img {
-    max-width: 70px;
-  }
-}
+            100% {
+                transform: translateX(-50%);
+            }
+        }
 
 
-.policy-btn{
-    border: none;
-    border-radius: 40px;
-    background-color: pink;
-    color: #000;
-    padding:20px;
-    box-shadow: 10px 10px 10px rgba(0,0,0,0.4);
-    cursor:pointer;
-    margin-left: 60px;
-    margin-bottom: 10px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        @media (max-width: 768px) {
+            .slide {
+                width: 150px;
+            }
 
-}
-.modal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  z-index: 1000;
-  left: 0; top: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-}
-.modal.hidden {
-     display: none; 
-}
-.modal-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-.close {
-  float: right;
-  font-size: 24px;
-  cursor: pointer;
-}
-.tabs {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
-}
-.tablink {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  background: #eee;
-  cursor: pointer;
-}
-.tablink.active {
-  background: #ff6f61;
-  color: white;
-}
-.tabcontent { display: none; }
-.tabcontent.active { display: block; }
+            .slide img {
+                max-width: 90px;
+            }
+        }
 
-/* Mobile */
-@media (max-width: 500px) {
-  .tablink {
-    font-size: 14px;
-    padding: 8px;
-  }
-}
+        @media (max-width: 480px) {
+            .partners h2 {
+                font-size: 1.5rem;
+            }
+
+            .slide {
+                width: 120px;
+            }
+
+            .slide img {
+                max-width: 70px;
+            }
+        }
+
+
+        .policy-btn {
+            border: none;
+            border-radius: 40px;
+            background-color: pink;
+            color: #000;
+            padding: 20px;
+            box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            margin-left: 60px;
+            margin-bottom: 10px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+        }
+
+        .modal {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .tablink {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: #eee;
+            cursor: pointer;
+        }
+
+        .tablink.active {
+            background: #ff6f61;
+            color: white;
+        }
+
+        .tabcontent {
+            display: none;
+        }
+
+        .tabcontent.active {
+            display: block;
+        }
+
+        /* Mobile */
+        @media (max-width: 500px) {
+            .tablink {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
     </style>
 </head>
 
@@ -1021,7 +1043,7 @@ $result = $conn->query($sql);
     <section class="delivery-section">
         <h2>Free Delivery on Orders Over R700!</h2>
         <p class="delivery-message">
-            Treat yourself to our delicious cakes, and if your order is worth <strong>R700.00 or more</strong>, we’ll
+            Treat yourself to our delicious cakes — and if your order is worth <strong>R700.00 or more</strong>, we’ll
             deliver it to your doorstep at <strong>no extra cost</strong>!
         </p>
         <div class="truck-wrapper">
@@ -1189,26 +1211,26 @@ $result = $conn->query($sql);
         </div>
     </section>
 
- <section class="partners">
-  <h2>Our Distribution Partners</h2>
-  <p><i>We are currently in partnership with:</i></p>
-  <div class="logo-slider">
-    <div class="slide-track">
-      <div class="slide"><img src="img/shoprite-logo.jpg" alt="Supermarket 1"></div>
-      <div class="slide"><img src="img/checkers-logo-1.png" alt="Supermarket 2"></div>
-      <div class="slide"><img src="img/picknpay-logo-1.svg" alt="Supermarket 3"></div>
-      <div class="slide"><img src="img/boxers-logo-1.jpg" alt="Supermarket 4"></div>
-      <div class="slide"><img src="img/shoprite-logo.jpg" alt="Supermarket 1"></div>
-      <div class="slide"><img src="img/checkers-logo-1.png" alt="Supermarket 2"></div>
-      <div class="slide"><img src="img/picknpay-logo-1.svg" alt="Supermarket 3"></div>
-      <div class="slide"><img src="img/boxers-logo-1.jpg" alt="Supermarket 4"></div>
-      <div class="slide"><img src="img/shoprite-logo.jpg" alt="Supermarket 1"></div>
-      <div class="slide"><img src="img/checkers-logo-1.png" alt="Supermarket 2"></div>
-      <div class="slide"><img src="img/picknpay-logo-1.svg" alt="Supermarket 3"></div>
-      <div class="slide"><img src="img/boxers-logo-1.jpg" alt="Supermarket 4"></div>
-    </div>
-  </div>
-</section>
+    <section class="partners">
+        <h2>Our Distribution Partners</h2>
+        <p><i>We are currently in partnership with:</i></p>
+        <div class="logo-slider">
+            <div class="slide-track">
+                <div class="slide"><img src="img/shoprite-logo.jpg" alt="Supermarket 1"></div>
+                <div class="slide"><img src="img/checkers-logo-1.png" alt="Supermarket 2"></div>
+                <div class="slide"><img src="img/picknpay-logo-1.svg" alt="Supermarket 3"></div>
+                <div class="slide"><img src="img/boxers-logo-1.jpg" alt="Supermarket 4"></div>
+                <div class="slide"><img src="img/shoprite-logo.jpg" alt="Supermarket 1"></div>
+                <div class="slide"><img src="img/checkers-logo-1.png" alt="Supermarket 2"></div>
+                <div class="slide"><img src="img/picknpay-logo-1.svg" alt="Supermarket 3"></div>
+                <div class="slide"><img src="img/boxers-logo-1.jpg" alt="Supermarket 4"></div>
+                <div class="slide"><img src="img/shoprite-logo.jpg" alt="Supermarket 1"></div>
+                <div class="slide"><img src="img/checkers-logo-1.png" alt="Supermarket 2"></div>
+                <div class="slide"><img src="img/picknpay-logo-1.svg" alt="Supermarket 3"></div>
+                <div class="slide"><img src="img/boxers-logo-1.jpg" alt="Supermarket 4"></div>
+            </div>
+        </div>
+    </section>
 
     <section id="location" class="map-section">
         <h2>Visit Us in Cape Town CBD</h2>
@@ -1292,4 +1314,3 @@ $result = $conn->query($sql);
 
 
 </html>
-

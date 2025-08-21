@@ -1,17 +1,6 @@
 <?php
 session_start();
 include 'includes/header.php';
-// Check if user is logged in by verifying session data
-// if (isset($_SESSION['user'])) {
-//     $user = $_SESSION['user'];
-//         $user = array_merge($user, $_SESSION['user']);
-// } else {
-// Handle case where user isn't logged in
-//     header("Location: login.php");
-//     exit();
-// }
-
-
 require_once 'includes/db_connect.php';
 
 
