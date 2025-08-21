@@ -1021,7 +1021,7 @@ $result = $conn->query($sql);
     <section class="delivery-section">
         <h2>Free Delivery on Orders Over R700!</h2>
         <p class="delivery-message">
-            Treat yourself to our delicious cakes — and if your order is worth <strong>R700.00 or more</strong>, we’ll
+            Treat yourself to our delicious cakes, and if your order is worth <strong>R700.00 or more</strong>, we’ll
             deliver it to your doorstep at <strong>no extra cost</strong>!
         </p>
         <div class="truck-wrapper">
