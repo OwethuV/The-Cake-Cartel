@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS USERS (
     address TEXT,
     password VARCHAR(255) NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    profile_picture VARCHAR(255) DEFAULT NULL
 );
 
 -- Create PRODUCTS table
@@ -61,6 +62,15 @@ CREATE TABLE IF NOT EXISTS ORDER_ITEMS (
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (orderId) REFERENCES ORDERS(orderId) ON DELETE CASCADE,
     FOREIGN KEY (productId) REFERENCES PRODUCTS(productId) ON DELETE CASCADE
+);
+
+-- Create password_resets table
+CREATE TABLE IF NOT EXISTS password_resets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    expires INT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Inserting products into the PRODUCTS table
@@ -119,11 +129,3 @@ But the true magic happens when they are fresh from the oven, drizzled with a th
 ('Chocolate Hazelnut Éclairs', 'https://raw.githubusercontent.com/OwethuV/product_pictures/main/eclairs.webp', 199.99, 'Unleash your inner connoisseur with our exquisite Chocolate Hazelnut Éclairs.
 This is a true French classic, elevated to a new level of pure indulgence. We begin with a delicate, airy choux pastry shell, baked to a perfect golden crispness. Each éclair is then generously filled with a rich, velvety chocolate hazelnut cream, a blend so smooth and decadent its like a dream.
 The finishing touch is a luxurious dark chocolate ganache, which coats the top with a glossy, deep cocoa shine. A final sprinkle of crunchy, toasted hazelnuts adds a delightful texture and a nutty, aromatic finish. Its a symphony of textures and flavors—from the crisp pastry and creamy filling to the rich chocolate and satisfying crunch—that will transport you /straight to a Parisian patisserie.', 'Hazelnut');
-
-SELECT o.orderId, o.deliveryPrice, o.totalPrice, o.status, o.createdAt,
-                               oi.productId, p.productName, p.productImg, oi.quantity, oi.price AS itemTotalPrice
-                        FROM ORDERS o
-                        JOIN ORDER_ITEMS oi ON o.orderId = oi.orderId
-                        JOIN PRODUCTS p ON oi.productId = p.productId
-                        WHERE o.userId = 4
-                        ORDER BY o.createdAt DESC;
