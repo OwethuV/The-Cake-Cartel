@@ -101,6 +101,7 @@ Make sure to start the server and place the project files in the appropriate dir
 5. You will receive email notifications for order confirmations and updates.
    
 ## Team
+- Shumeez Van Schalkwyk
 - Sihle Sawula
 - Leah Moosa
 - Hanaa Richards
