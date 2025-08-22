@@ -41,15 +41,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mail->isSMTP();
     $mail->SMTPAuth = true;
 
-    $mail->Host = "smtp.gmail.com";
+    $mail->Host = $_ENV['SMTP_HOST'];
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 
-    $mail->Username = "owethu.valantiya@gmail.com";
-    $mail->Password = "zxad jajd loql jbzr";
+    $mail->Username = $_ENV['SMTP_USER'];
+    $mail->Password = $_ENV['SMTP_PASS'];
 
     $mail->setFrom($email, $name);
-    $mail->addAddress("thecakecartel2025@gmail.com");
+    $mail->addAddress("thecakecartel2025@gmail.com"); // Add your email address here
 
     $mail->Subject = $subject; // Set the subject
     $mail->isHTML(true); // Set email format to HTML
