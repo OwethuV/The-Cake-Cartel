@@ -81,7 +81,7 @@ PAYFAST_CANCEL_URL=http://localhost/cancel.php
 PAYFAST_NOTIFY_URL=http://localhost/notify.php
 ```
 
-### 5. Configuration
+## Configuration
 To run this application, you need a server environment. You can use:
 - **XAMPP**: A free and open-source cross-platform web server solution stack package. (What we used)
 - **MAMP**: A free, local server environment that can be installed under macOS and Windows with just a few clicks.
@@ -89,7 +89,7 @@ To run this application, you need a server environment. You can use:
 
 Make sure to start the server and place the project files in the appropriate directory (e.g., `htdocs` for XAMPP).
 
-## 6. Usage
+## Usage
 1. Start your local server (e.g., XAMPP, MAMP).
 
 2. Open your web browser and navigate to `http://localhost/the-cake-cartel`.
@@ -107,5 +107,5 @@ Make sure to start the server and place the project files in the appropriate dir
 - Hanaa Richards
 - Owethu Valantiya
 
-## 7. License
+## License
 This project is for educational purposes only.
