@@ -353,6 +353,216 @@ $result = $conn->query($sql);
                     </div>
                 </div>
             </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card skeleton-item">
+                <div class="product-image">
+                    <div class="skeleton-image"></div>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name skeleton-text"></h3>
+                    <p class="product-description skeleton-text"></p>
+                    <p class="product-price skeleton-text"></p>
+                    <div class="product-actions">
+                        <div class="skeleton-button"></div>
+                        <div class="skeleton-button"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="product-grid products" id="products" style="display: none;">
