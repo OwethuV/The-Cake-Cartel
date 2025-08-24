@@ -28,11 +28,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Send the email
         $mail = new PHPMailer\PHPMailer\PHPMailer();
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
+        $mail->Host = $_ENV['SMTP_HOST'];
         $mail->SMTPAuth = true;
-        $mail->Username = "owethu.valantiya@gmail.com";
-        $mail->Password = "zxad jajd loql jbzr";
-        $mail->Port = 587;
+        $mail->Username = $_ENV['SMTP_USER'];
+        $mail->Password = $_ENV['SMTP_PASS'];
+        $mail->Port = $_ENV['SMTP_PORT'];
 
         $mail->setFrom('thecakecartel2025@gmail.com', 'The Cake Cartel');
         $mail->addAddress($email);
