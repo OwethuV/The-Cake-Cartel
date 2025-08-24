@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $mail->Host = $_ENV['SMTP_HOST'];
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587;
+    $mail->Port = $_ENV['SMTP_PORT'];
 
     $mail->Username = $_ENV['SMTP_USER'];
     $mail->Password = $_ENV['SMTP_PASS'];
