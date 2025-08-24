@@ -1,20 +1,24 @@
 <?php
-// Require Composer's autoloader
-require_once __DIR__ . '/../vendor/autoload.php';
-// Load environment variables from .env file
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+require __DIR__ . '/../vendor/autoload.php';
+
+use Dotenv\Dotenv;
+
+// Load .env from project root
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
-//Get database credentials from environment variables
-$servername = $_ENV['DB_HOST'];
-$username = $_ENV['DB_USER'];
-$password = $_ENV['DB_PASS'];
+
+$host = $_ENV['DB_HOST'];
+$user = $_ENV['DB_USER'];
+$pass = $_ENV['DB_PASS'];
 $dbname = $_ENV['DB_NAME'];
-//Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-//Check connection
+
+$conn = new mysqli($host, $user, $pass, $dbname);
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+
 //Set character set to UTF-8
 $conn->set_charset("utf8");
+
 
