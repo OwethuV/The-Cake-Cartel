@@ -74,11 +74,12 @@ SMTP_USER=your_email@example.com
 SMTP_PASS=your_email_password
 SMTP_PORT=587
 
-PAYFAST_MERCHANT_ID=your_merchant_id
-PAYFAST_MERCHANT_KEY=your_merchant key
-PAYFAST_RETURN_URL=http://localhost/return.php
-PAYFAST_CANCEL_URL=http://localhost/cancel.php
-PAYFAST_NOTIFY_URL=http://localhost/notify.php
+
+# PAYFAST_MERCHANT_ID=your_merchant_id
+# PAYFAST_MERCHANT_KEY=your_merchant key
+# PAYFAST_RETURN_URL=http://localhost/return.php
+# PAYFAST_CANCEL_URL=http://localhost/cancel.php
+# PAYFAST_NOTIFY_URL=http://localhost/notify.php
 ```
 
 ## Configuration
